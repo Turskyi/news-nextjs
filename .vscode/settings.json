@@ -8,6 +8,13 @@
         "plaintext",
         "jsonc",
         "typescriptreact",
-        "json"
-    ]
+        "json",
+        "Log",
+        "javascript"
+    ],
+    "spellright.parserByClass": {
+        "Log": {
+            "parser": "code"
+        }
+    }
 }
