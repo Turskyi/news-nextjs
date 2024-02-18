@@ -38,8 +38,8 @@ Here is a screenshot of the project:
 
 This project was built using the following technologies and tools:
 
-- [Next.js](https://wallisconsultancy.co.uk): A React framework for building fast and scalable web applications.
-- [React](https://github.com/james-wallis/wallisconsultancy): A JavaScript library for building user interfaces.
+- [Next.js](https://nextjs.org): A React framework for building fast and scalable web applications.
+- **React**: A JavaScript library for building user interfaces.
 - **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
 - [News API](https://newsapi.org): A simple and easy-to-use API that returns JSON metadata for headlines and articles live all over the web.
 - **SWR**: A React hook for data fetching.
