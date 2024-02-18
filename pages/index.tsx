@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { NewsArticle, NewsResponse } from '@/models/NewsArticles';
 import NewsArticleGrid from '@/components/NewsArticleGrid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 
 interface NewsPageProps {
