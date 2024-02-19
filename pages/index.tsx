@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { NewsArticle, NewsResponse } from '@/models/NewsArticles';
+import { NewsArticle } from '@/models/NewsArticles';
 import NewsArticleGrid from '@/components/NewsArticleGrid';
 import { useState } from 'react';
 import useSWR from 'swr';
+import { BASE_URL } from '../constants';
 
 interface NewsPageProps {
   newsArticles: NewsArticle[];
@@ -12,13 +13,10 @@ interface NewsPageProps {
 export const getServerSideProps: GetServerSideProps<
   NewsPageProps
 > = async () => {
-  const response = await fetch(
-    'https://newsapi.org/v2/top-headlines?country=ca&apiKey=' +
-      process.env.NEWS_API_KEY,
-  );
-  const newsResponse: NewsResponse = await response.json();
+  const response = await fetch(BASE_URL + 'api/news');
+  const newsResponse: NewsArticle[] = await response.json();
   return {
-    props: { newsArticles: newsResponse.articles },
+    props: { newsArticles: newsResponse },
   };
   // let error go to 500 page
 };
