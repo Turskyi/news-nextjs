@@ -6,7 +6,8 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-    const result = await fetch(`https://newsapi.org/v2/top-headlines?country=ca&apiKey=${process.env.NEWS_API_KEY}`);
+    const countryCode = request.query.country || 'ca';
+    const result = await fetch(`https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=${process.env.NEWS_API_KEY}`);
     const newsResponse: NewsResponse = await result.json();
     return response.status(200).json(newsResponse.articles);
 }
