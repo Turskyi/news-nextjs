@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={inter.className}>
       <Head>
-        <title key="title">News</title>
+        <title key="title">News Glance</title>
         <meta name="description" key="description" content="News" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

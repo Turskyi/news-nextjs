@@ -74,6 +74,9 @@ const NavBar = () => {
                 USA
               </NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link as={Link} href="/contact">
+              Contact us
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
