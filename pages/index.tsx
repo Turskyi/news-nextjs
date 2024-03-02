@@ -96,7 +96,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
           </h2>
         )}
         {/* Display the conclusion from the conclusion state using a <p> tag */}
-        <p style={{ fontSize: '36px', fontWeight: 'bold' }}>{conclusion}</p>
+        <p style={{ fontSize: '32px', fontWeight: 'bold' }}>{conclusion}</p>
         {/* This page uses getServerSideProps to fetch data server-side on every request
             This allows search engines to crawl the page content and improves SEO. */}
         <NewsArticleGrid articles={newsArticles} />
