@@ -1,20 +1,22 @@
 {
-    "spellright.language": [
-        "en"
-    ],
-    "spellright.documentTypes": [
-        "markdown",
-        "latex",
-        "plaintext",
-        "jsonc",
-        "typescriptreact",
-        "json",
-        "Log",
-        "javascript"
-    ],
-    "spellright.parserByClass": {
-        "Log": {
-            "parser": "code"
-        }
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 80,
+  "prettier.printWidth": 80,
+  "editor.rulers": [80],
+  "spellright.language": ["en"],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext",
+    "jsonc",
+    "typescriptreact",
+    "json",
+    "Log",
+    "javascript"
+  ],
+  "spellright.parserByClass": {
+    "Log": {
+      "parser": "code"
     }
+  }
 }

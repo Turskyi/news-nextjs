@@ -2,12 +2,16 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { NewsArticle } from '@/models/NewsArticles';
 import NewsArticleGrid from '@/components/NewsArticleGrid';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
-import { BASE_URL } from '../constants';
+import { BASE_URL, NEWS_MAX } from '../constants';
 
 interface NewsPageProps {
   newsArticles: NewsArticle[];
+}
+
+interface ConclusionResponse {
+  conclusion: string;
 }
 
 export const getServerSideProps: GetServerSideProps<
@@ -24,27 +28,46 @@ export const getServerSideProps: GetServerSideProps<
 export default function NewsPage({ newsArticles }: NewsPageProps) {
   // Create a state variable for the conclusion data
   const [conclusion, setConclusion] = useState('');
+  const fetchConclusion = useCallback(async () => {
+    
+    const articles = newsArticles.slice(0, NEWS_MAX).map((article) => ({
+      title: article.title,
+      description: article.description,
+      articleText: article.content,
+    }));
 
-  // Use the useSWR hook to fetch the data from the "news-conclusion" endpoint
-  useSWR('/api/news-conclusion', async () => {
-    // Use the first news articles' titles as the prompt
-    const prompt = newsArticles
-      .slice(0, 5)
-      .map((article) => article.title)
-      .join('; ');
+    const response = await fetch('/api/conclusion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ articles: articles }),
+    });
 
-    // Encode the prompt as a query parameter
-    const encodedPrompt = encodeURIComponent(prompt);
+    const data: ConclusionResponse = await response.json();
+    return data;
+  }, [newsArticles]);
 
-    // Make a request to the API endpoint with the prompt
-    const response = await fetch(
-      '/api/news-conclusion?prompt=' + encodedPrompt,
-    );
-    const data = await response.json();
+  useEffect(() => {
+    if (newsArticles.length > 0) {
+      fetchConclusion().then((data) => {
+        if (data) {
+          setConclusion(data.conclusion);
+        }
+      });
+    }
+  }, [newsArticles, fetchConclusion]);
 
-    // Update the conclusion state with the response data
-    setConclusion(data.conclusion);
-  });
+  const { data } = useSWR<ConclusionResponse>(
+    '/api/conclusion',
+    fetchConclusion,
+  );
+
+  useEffect(() => {
+    if (data) {
+      setConclusion(data.conclusion);
+    }
+  }, [data]);
 
   return (
     <>
@@ -92,7 +115,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         {/* Display the title for the conclusion using a <h2> tag */}
         {conclusion && (
           <h2 style={{ textAlign: 'center', color: 'green' }}>
-            Conclusion from News Headlines
+            Conclusion from the News
           </h2>
         )}
         {/* Display the conclusion from the conclusion state using a <p> tag */}

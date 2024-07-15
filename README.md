@@ -1,5 +1,6 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct-single.svg)](https://stand-with-ukraine.pp.ua)
 ![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=news-nextjs-pink&style=plastic)
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Turskyi/news-nextjs">
 
 # News Glance
 
@@ -13,14 +14,14 @@ view the full article in a web-view.
 ## Installation and usage
 
 To run this project locally, you will need to have Node.js and npm installed on
-your machine. You will also need to get an API key
-from [News API](https://newsapi.org) and add it to your `.env.local` file
-as `NEWS_API_KEY`.
+your machine. You will also need to get an API key from
+[News API](https://newsapi.org) and add it to your `.env.local` file as
+`NEWS_API_KEY`.
 
 Follow these steps to install and run the project:
 
-- Clone this repository to your local machine
-  using `git clone https://github.com/Turskyi/news-nextjs.git`.
+- Clone this repository to your local machine using
+  `git clone https://github.com/Turskyi/news-nextjs.git`.
 - Navigate to the project directory using `cd news-glance`.
 - Install the dependencies using `npm install`.
 - Run the development server using `npm run dev`.
@@ -33,8 +34,8 @@ auto-updates as you edit the file.
 on [http://localhost:3000/api/news](http://localhost:3000/api/news). This
 endpoint can be edited in `pages/api/news.ts`.
 
-This project
-uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
+This project uses
+[`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
 automatically optimize and load Inter, a custom Google Font.
 
 ## Demo and screenshots
@@ -55,8 +56,7 @@ This project was built using the following technologies and tools:
 - **React**: A JavaScript library for building user interfaces.
 - **Tailwind CSS**: A utility-first CSS framework for rapidly building custom
   designs.
-- [News API](https://newsapi.org): A simple and easy-to-use API that returns
-  JSON metadata for headlines and articles live all over the web.
+
 - **SWR**: A React hook for data fetching.
 
 - Programming language: [TypeScript](https://www.typescriptlang.org);
@@ -65,21 +65,22 @@ This project was built using the following technologies and tools:
 
 - Git Hosting Service: [GitHub](https://github.com);
 
-- CI/CD: [Vercel](https://vercel.com/features/previews) is used to
-  deliver the new releases to the production environment after every push to the
+- CI/CD: [Vercel](https://vercel.com/features/previews) is used to deliver the
+  new releases to the production environment after every push to the
   **master** branch;
 
-- Api: https://platform.openai.com/docs/api-reference;
+- [News API](https://newsapi.org): A simple and easy-to-use API that returns
+  JSON metadata for headlines and articles live all over the web.
+
+- **Ai Api** : https://platform.openai.com/docs/api-reference;
 
 - Architectural pattern:
   [Monolith](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#all-in-one-applications);
 
 - **Code Readability:** code is easily readable with no unnecessary blank lines,
-  no unused variables
-  or methods, and no commented-out code, all variables, methods, and resource
-  IDs are descriptively
-  named such that another developer reading the code can easily understand their
-  function.
+  no unused variables or methods, and no commented-out code, all variables,
+  methods, and resource IDs are descriptively named such that another
+  developer reading the code can easily understand their function.
 
 ## Contribution
 
@@ -92,7 +93,6 @@ contact me at dmytro@turskyi.com if you have any questions or feedback.
 This project is based on
 the [Next.js Full Beginner Course (Pages Directory) [2023] TypeScript](https://youtu.be/e1EIwuO-Dlo?si=YwNxjUee5ovtzIXe)
 by [Coding in Flow](https://github.com/codinginflow) YouTube channel.
-All credit goes to the original
-author [Florian Walther](https://github.com/florianwalther-private).
-I only followed
-along and made some minor changes.
+All credit goes to the original author
+[Florian Walther](https://github.com/florianwalther-private).
+I only followed along and made some minor changes.
