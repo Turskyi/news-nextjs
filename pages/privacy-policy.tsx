@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export default function PrivacyPolicyAndroid() {
+export default function PrivacyPolicy() {
   return (
     <div>
       <Head>
@@ -8,58 +8,74 @@ export default function PrivacyPolicyAndroid() {
       </Head>
 
       <main>
-        <h1>
-          Privacy Policy for Android Mobile Application &quot;News Glance&quot;
-        </h1>
+        <h1>Privacy Policy</h1>
         <section>
+          <h2>Table of Contents</h2>
+          <ul>
+            <li>
+              <a href="#introduction">Introduction</a>
+            </li>
+            <li>
+              <a href="#information-we-collect">Information We Collect</a>
+            </li>
+            <li>
+              <a href="#how-we-use-your-information">
+                How We Use Your Information
+              </a>
+            </li>
+            <li>
+              <a href="#data-retention">Data Retention</a>
+            </li>
+            <li>
+              <a href="#third-party-services">Third-Party Services</a>
+            </li>
+            <li>
+              <a href="#user-rights">User Rights</a>
+            </li>
+            <li>
+              <a href="#updates-to-this-policy">Updates to this Policy</a>
+            </li>
+            <li>
+              <a href="#contact-us">Contact Us</a>
+            </li>
+          </ul>
+        </section>
+
+        <section id="introduction">
           <h2>Introduction</h2>
           <p>
             At News Glance, we are committed to protecting your personal
             information and your right to privacy. This Privacy Policy applies
-            to all information collected through our Android app.
+            to all information collected through our website.
           </p>
           <p>
             <strong>Last Revised: July 15, 2024</strong>
           </p>
         </section>
 
-        <section>
+        <section id="information-we-collect">
           <h2>Information We Collect</h2>
           <p>
             We collect personal information that you voluntarily provide to us
-            when you use our app. The personal information that we collect
-            depends on the context of your interactions with us and the app, the
-            choices you make, and the features you use. This may include:
+            when you use our website. The personal information that we collect
+            depends on the context of your interactions with us and the website,
+            the choices you make, and the features you use.
           </p>
-          <ul>
-            <li>Contact information (such as email address)</li>
-            <li>Usage data (such as interactions with the app)</li>
-            <li>
-              Device information (such as device type and operating system)
-            </li>
-          </ul>
         </section>
 
-        <section>
+        <section id="how-we-use-your-information">
           <h2>How We Use Your Information</h2>
           <p>
-            We use personal information collected via our app for a variety of
-            business purposes described below. We process your personal
+            We use personal information collected via our website for a variety
+            of business purposes described below. We process your personal
             information for these purposes in reliance on our legitimate
             business interests, in order to enter into or perform a contract
             with you, with your consent, and/or for compliance with our legal
-            obligations. These purposes include:
+            obligations.
           </p>
-          <ul>
-            <li>Providing and managing your access to our app</li>
-            <li>Personalizing your experience</li>
-            <li>Improving our app and services</li>
-            <li>Communicating with you</li>
-            <li>Ensuring compliance with legal obligations</li>
-          </ul>
         </section>
 
-        <section>
+        <section id="data-retention">
           <h2>Data Retention</h2>
           <p>
             We retain your personal information for as long as necessary to
@@ -68,22 +84,17 @@ export default function PrivacyPolicyAndroid() {
           </p>
         </section>
 
-        <section>
+        <section id="third-party-services">
           <h2>Third-Party Services</h2>
           <p>
             We may share your data with third-party service providers to help us
             provide and improve our services. These third parties are obligated
             to protect your information and use it only for the purposes we
-            specify. Examples include:
+            specify.
           </p>
-          <ul>
-            <li>Analytics providers</li>
-            <li>Cloud storage providers</li>
-            <li>Customer support platforms</li>
-          </ul>
         </section>
 
-        <section>
+        <section id="user-rights">
           <h2>User Rights</h2>
           <p>
             Depending on your location, you may have the following rights
@@ -98,7 +109,7 @@ export default function PrivacyPolicyAndroid() {
           </ul>
         </section>
 
-        <section>
+        <section id="updates-to-this-policy">
           <h2>Updates to this Policy</h2>
           <p>
             We may update this privacy policy from time to time. The updated
@@ -107,7 +118,7 @@ export default function PrivacyPolicyAndroid() {
           </p>
         </section>
 
-        <section>
+        <section id="contact-us">
           <h2>Contact Us</h2>
           <p>
             If you have questions or comments about this policy, you may email

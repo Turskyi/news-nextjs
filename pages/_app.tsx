@@ -7,6 +7,7 @@ import { Container } from 'react-bootstrap';
 import styles from '@/styles/App.module.css';
 import NavBar from '@/components/NavBar';
 import NextNProgress from 'nextjs-progressbar';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Container className={styles.pageContainer}>
         <Component {...pageProps} />
       </Container>
+      <Footer />
     </div>
   );
 }

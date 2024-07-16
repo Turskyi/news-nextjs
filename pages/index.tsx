@@ -29,7 +29,6 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   // Create a state variable for the conclusion data
   const [conclusion, setConclusion] = useState('');
   const fetchConclusion = useCallback(async () => {
-    
     const articles = newsArticles.slice(0, NEWS_MAX).map((article) => ({
       title: article.title,
       description: article.description,

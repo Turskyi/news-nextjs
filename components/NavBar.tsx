@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
+import Image from 'next/image';
+import logoImage from '@/assets/images/news_glance_logo.png';
 
 const NavBar = () => {
   const [countryCode, setCountryCode] = useState<string>('ca');
@@ -16,6 +18,13 @@ const NavBar = () => {
       collapseOnSelect={true}
     >
       <Container>
+        <Image
+          style={{ marginRight: 10 }}
+          src={logoImage}
+          alt="Logo image"
+          width={48}
+          height={48}
+        />
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav>
@@ -78,6 +87,18 @@ const NavBar = () => {
               Contact us
             </Nav.Link>
           </Nav>
+          <a
+            href="https://play.google.com/store/apps/details?id=com.turskyi.news_glance"
+            target="_blank"
+            style={{ marginLeft: 10 }}
+          >
+            <Image
+              src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+              alt="Get it on Google Play"
+              width={124}
+              height={48}
+            />
+          </a>
         </Navbar.Collapse>
       </Container>
     </Navbar>
