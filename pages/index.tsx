@@ -5,6 +5,7 @@ import NewsArticleGrid from '@/components/NewsArticleGrid';
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import { BASE_URL, NEWS_MAX } from '../constants';
+import ReactMarkdown from 'react-markdown';
 
 interface NewsPageProps {
   newsArticles: NewsArticle[];
@@ -35,7 +36,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
       articleText: article.content,
     }));
 
-    const response = await fetch('/api/conclusion', {
+    const response = await fetch('/api/news-conclusion', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -118,7 +119,9 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
           </h2>
         )}
         {/* Display the conclusion from the conclusion state using a <p> tag */}
-        <p style={{ fontSize: '32px', fontWeight: 'bold' }}>{conclusion}</p>
+        <div style={{ fontSize: '24px' }}>
+          <ReactMarkdown>{conclusion}</ReactMarkdown>
+        </div>
         {/* This page uses getServerSideProps to fetch data server-side on every request
             This allows search engines to crawl the page content and improves SEO. */}
         <NewsArticleGrid articles={newsArticles} />
