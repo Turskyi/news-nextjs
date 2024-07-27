@@ -111,13 +111,15 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         />
       </Head>
       <main>
-        <h1>News Glance</h1>
-        {/* Display the title for the conclusion using a <h2> tag */}
-        {conclusion && (
-          <h2 style={{ textAlign: 'center', color: 'green' }}>
-            Conclusion from the News
-          </h2>
-        )}
+        <h1
+          style={{
+            textAlign: 'center',
+            fontSize: '50px',
+            fontFamily: 'Bree Serif',
+          }}
+        >
+          News Glance
+        </h1>
         {/* Display the conclusion from the conclusion state using a <p> tag */}
         <div style={{ fontSize: '24px' }}>
           <ReactMarkdown>{conclusion}</ReactMarkdown>
