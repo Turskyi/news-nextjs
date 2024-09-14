@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 import Image from 'next/image';
 import logoImage from '@/assets/images/news_glance_logo.png';
+import { DEFAULT_COUNTRY_CODE } from '@/constants';
 
 const NavBar = () => {
-  const [countryCode, setCountryCode] = useState<string>('ca');
+  const [countryCode, setCountryCode] = useState<string>(DEFAULT_COUNTRY_CODE);
   const handleCountryChange = (countryCode: string) => {
     setCountryCode(countryCode);
   };
@@ -61,6 +62,13 @@ const NavBar = () => {
               </NavDropdown>
             )}
             <NavDropdown title="Country" id="country-dropdown">
+            <NavDropdown.Item
+                as={Link}
+                href="/countries/us"
+                onClick={() => handleCountryChange('us')}
+              >
+                USA
+              </NavDropdown.Item>
               <NavDropdown.Item
                 as={Link}
                 href="/countries/ca"
@@ -74,13 +82,6 @@ const NavBar = () => {
                 onClick={() => handleCountryChange('ua')}
               >
                 Українa
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                href="/countries/us"
-                onClick={() => handleCountryChange('us')}
-              >
-                USA
               </NavDropdown.Item>
             </NavDropdown>
             <Nav.Link as={Link} href="/contact">

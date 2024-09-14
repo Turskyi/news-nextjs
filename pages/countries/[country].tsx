@@ -11,9 +11,9 @@ interface CountryNewsPageProps {
 export const getStaticPaths: GetStaticPaths = async () => {
   const countryOptions = [
     // this could be coming from an API
+    'us',
     'ca',
     'ua',
-    'us',
   ];
 
   const paths = countryOptions.map((option) => ({

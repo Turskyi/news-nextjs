@@ -18,7 +18,7 @@ interface ConclusionResponse {
 export const getServerSideProps: GetServerSideProps<
   NewsPageProps
 > = async () => {
-  const response = await fetch(BASE_URL + 'api/news');
+  const response = await fetch(BASE_URL + 'api/news?country=US');
   const newsResponse: NewsArticle[] = await response.json();
   return {
     props: { newsArticles: newsResponse },
