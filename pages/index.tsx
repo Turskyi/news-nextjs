@@ -4,7 +4,7 @@ import { NewsArticle } from '@/models/NewsArticles';
 import NewsArticleGrid from '@/components/NewsArticleGrid';
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
-import { BASE_URL, NEWS_MAX } from '../constants';
+import { BASE_URL, DEFAULT_COUNTRY_CODE, NEWS_MAX } from '../constants';
 import ReactMarkdown from 'react-markdown';
 
 interface NewsPageProps {
@@ -18,7 +18,9 @@ interface ConclusionResponse {
 export const getServerSideProps: GetServerSideProps<
   NewsPageProps
 > = async () => {
-  const response = await fetch(BASE_URL + 'api/news?country=US');
+  const response = await fetch(
+    BASE_URL + 'api/news?country=' + DEFAULT_COUNTRY_CODE,
+  );
   const newsResponse: NewsArticle[] = await response.json();
   return {
     props: { newsArticles: newsResponse },
@@ -94,7 +96,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         {/* You can use any image URL that is publicly accessible */}
         <meta
           property="og:image"
-          content="https://news.turskyi.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75"
+          content={`${BASE_URL}_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75`}
         />
         {/* Use the twitter: prefix for Twitter meta tags */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -107,7 +109,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         {/* You can use the same image URL as the og:image meta tag */}
         <meta
           name="twitter:image"
-          content="https://news.turskyi.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75"
+          content={`${BASE_URL}_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75`}
         />
       </Head>
       <main>

@@ -35,8 +35,9 @@ const NavBar = () => {
             <Nav.Link as={Link} href="/search">
               Search
             </Nav.Link>
+            {/* TODO: Fix the issue with "Categories" and "Country" drop-downs and re-enable them */}
             {/* Conditionally render "Categories" dropdown based on country code */}
-            {countryCode !== 'ua' && (
+            {/* {countryCode !== 'ua' && (
               <NavDropdown title="Categories" id="categories-dropdown">
                 <NavDropdown.Item as={Link} href="/categories/business">
                   Business
@@ -61,7 +62,7 @@ const NavBar = () => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-            <NavDropdown title="Country" id="country-dropdown">
+            <NavDropdown title="Country" id="country-dropdown"> 
             <NavDropdown.Item
                 as={Link}
                 href="/countries/us"
@@ -83,7 +84,7 @@ const NavBar = () => {
               >
                 Українa
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
             <Nav.Link as={Link} href="/contact">
               Contact us
             </Nav.Link>

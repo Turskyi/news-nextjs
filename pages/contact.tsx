@@ -14,11 +14,15 @@ const ContactPage = () => {
           <p className="mb-4">
             <span className="font-bold">Phone:</span> +1 (437) 985-2581
           </p>
-          {/* Create a p element for the address */}
           <p className="mb-4">
-            <span className="font-bold">Address:</span> 500 Sherbourne St.,
-            Unit. 2701 Toronto Ontario M4X1L1 Canada
+            <span className="text-lg font-bold">Address:</span>
+            <address className="mt-2 block not-italic leading-relaxed">
+              3035 Finch West Avenue, <br />
+              North York, Ontario, <br />
+              M9M 0A3, Canada
+            </address>
           </p>
+
           {/* Create a p element for the website */}
           <p className="mb-4">
             <span className="font-bold">Website:</span>{' '}

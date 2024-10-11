@@ -19,6 +19,7 @@ const NewsArticleEntry = ({
     <a href={url}>
       <Card className="h-100">
         <Image
+          unoptimized
           src={validImageUrl || placeholderImage}
           width={500}
           height={200}
