@@ -7,7 +7,10 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://news-glance-ai.web.app',
+  );
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   response.setHeader(
     'Access-Control-Allow-Headers',

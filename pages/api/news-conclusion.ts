@@ -26,7 +26,10 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://news-glance-ai.web.app',
+  );
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   response.setHeader(
     'Access-Control-Allow-Headers',
@@ -71,11 +74,22 @@ export default async function handler(
       messages: [
         {
           role: 'system',
-          content:
-            'Transform the following news into one conclusion. Also highlight the most important article if one is more important than the others. Add emoji if appropriate. Format your messages in markdown format.',
+          content: `You are a seasoned news analyst tasked with drawing overall conclusions from a series of news articles.
+        
+        Your goal is to synthesize the following news articles into a SINGLE, concise conclusion that captures the common themes, trends, or the bigger picture implied by ALL of them taken together.
+        
+        Look for the connections between them and what they suggest when viewed as a whole.
+        
+        If there's one article that stands out as more significant, central, or influential than the others, briefly highlight it and ignore the rest.
+        
+        Keep your conclusion brief and impactful, using a tone appropriate for a news analysis.
+        
+        Use emojis when appropriate to enhance the message.
+        
+        Format your output in Markdown.`,
         },
         ...messages,
-        { role: 'user', content: 'Conclusion:' },
+        { role: 'user', content: 'Overall Conclusion:' },
       ],
       max_tokens: 500,
       temperature: 1,

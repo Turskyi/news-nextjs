@@ -19,7 +19,10 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://news-glance-ai.web.app',
+  );
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   response.setHeader(
     'Access-Control-Allow-Headers',
@@ -55,9 +58,11 @@ export default async function handler(
 
     const completion = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
-      prompt: `Transform the following news into a conclusion, highlighting the most important news if one is more important than the others.\n\n${prompt}\n\nConclusion:`,
-      max_tokens: 500,
-      temperature: 1,
+      prompt: `Summarize the following news articles into a brief conclusion, highlighting the most important point. Be concise and avoid retelling the entire stories.\n\n
+      Use emojis when appropriate to enhance the message.\n\n
+      ${prompt}\n\nConclusion:`,
+      max_tokens: 300,
+      temperature: 0.7,
       presence_penalty: 0,
       frequency_penalty: 0,
       stop: ['\n'],
