@@ -7,6 +7,17 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
   const countryCode = request.query.country || DEFAULT_COUNTRY_CODE;
 
   const result = await fetch(
