@@ -74,22 +74,22 @@ export default async function handler(
       messages: [
         {
           role: 'system',
-          content: `You are a seasoned news analyst tasked with drawing overall conclusions from a series of news articles.
+          content: `You are a seasoned news analyst tasked with drawing overall conclusion from a series of news articles.
         
-        Your goal is to synthesize the following news articles into a SINGLE, concise conclusion that captures the common themes, trends, or the bigger picture implied by ALL of them taken together.
+        Your goal is to synthesize the following news articles into a SINGLE, EXTREMELY CONCISE conclusion that captures the most important common theme, trend, or the most important overall takeaway. Your conclusion should be a single sentence, or at most two short sentences.
         
-        Look for the connections between them and what they suggest when viewed as a whole.
+        Focus ONLY on the core overarching conclusion.
         
-        If there's one article that stands out as more significant, central, or influential than the others, briefly highlight it and ignore the rest.
+        If there's one article that stands out as significantly more important than the others, identify it and ignore the rest.
         
-        Keep your conclusion brief and impactful, using a tone appropriate for a news analysis.
+        Keep it as brief and direct as possible.
         
-        Use emojis when appropriate to enhance the message.
+        Use emojis when is appropriate.
         
         Format your output in Markdown.`,
         },
         ...messages,
-        { role: 'user', content: 'Overall Conclusion:' },
+        { role: 'user', content: 'Conclusion:' },
       ],
       max_tokens: 500,
       temperature: 1,
