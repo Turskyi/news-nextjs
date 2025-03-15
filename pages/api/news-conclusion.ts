@@ -26,6 +26,17 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
   const input: Input = request.body;
 
   if (!input || !input.articles || input.articles.length === 0) {
@@ -34,9 +45,10 @@ export default async function handler(
       .json({ error: 'Please provide a list of articles ಠ_ಠ' });
   } else {
     const now = Date.now();
-    const fiveMinutes = 5 * 60 * 1000;
 
-    if (cache && now - cache.timestamp < fiveMinutes) {
+    const fourHours = 4 * 60 * 60 * 1000;
+
+    if (cache && now - cache.timestamp < fourHours) {
       return response.status(200).json({ conclusion: cache.conclusion });
     }
 
@@ -57,9 +69,10 @@ export default async function handler(
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        { 
-          role: 'system', 
-          content: 'Transform the following news into one conclusion. Also highlight the most important article if one is more important than the others. Add emoji if appropriate. Format your messages in markdown format.' 
+        {
+          role: 'system',
+          content:
+            'Transform the following news into one conclusion. Also highlight the most important article if one is more important than the others. Add emoji if appropriate. Format your messages in markdown format.',
         },
         ...messages,
         { role: 'user', content: 'Conclusion:' },
