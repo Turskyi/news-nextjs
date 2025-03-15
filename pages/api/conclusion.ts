@@ -19,6 +19,17 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
   const input: Input = request.body;
 
   if (!input || !input.articles || input.articles.length === 0) {
@@ -27,20 +38,20 @@ export default async function handler(
       .json({ error: 'Please provide a list of articles ಠ_ಠ' });
   } else {
     const prompt = input.articles
-    .map((article: Article) => {
-      let articlePrompt = `Title: ${article.title}`;
-      
-      if (article.description) {
-        articlePrompt += `\nDescription: ${article.description}`;
-      }
+      .map((article: Article) => {
+        let articlePrompt = `Title: ${article.title}`;
 
-      if (article.articleText) {
-        articlePrompt += `\nText: ${article.articleText}`;
-      }
+        if (article.description) {
+          articlePrompt += `\nDescription: ${article.description}`;
+        }
 
-      return articlePrompt;
-    })
-    .join('\n\n');
+        if (article.articleText) {
+          articlePrompt += `\nText: ${article.articleText}`;
+        }
+
+        return articlePrompt;
+      })
+      .join('\n\n');
 
     const completion = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
