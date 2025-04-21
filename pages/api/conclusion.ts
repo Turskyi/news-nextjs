@@ -56,19 +56,35 @@ export default async function handler(
       })
       .join('\n\n');
 
-    const completion = await openai.completions.create({
-      model: 'gpt-3.5-turbo-instruct',
-      prompt: `Summarize the following news articles into a brief conclusion, highlighting the most important point. Be concise and avoid retelling the entire stories.\n\n
-      Use emojis when appropriate to enhance the message.\n\n
-      ${prompt}\n\nConclusion:`,
-      max_tokens: 300,
-      temperature: 0.7,
-      presence_penalty: 0,
-      frequency_penalty: 0,
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a helpful assistant generating a single-sentence, plain-language "daily heads-up" for people who don’t follow the news.`,
+        },
+        {
+          role: 'user',
+          content: `You are a helpful assistant generating a single-sentence, plain-language "daily heads-up" for people who don’t follow the news.
+
+          Carefully read **all** of the following news articles before writing your answer. Think deeply about their overall meaning.
+          
+          Your task is to write **one clear sentence** that captures the most important thing a person should know today. Don't summarize every article. Don’t just take the first or last item. Instead, figure out what matters most in the big picture — the thing that might affect people's thinking, mood, or decisions.
+          
+          Write like a smart friend giving a quick heads-up. Use plain language, and include an emoji if it helps. Format your response in markdown format.
+          
+          News:
+          ${prompt}
+          
+          Conclusion:`,
+        },
+      ],
+      max_tokens: 80,
+      temperature: 0.6,
       stop: ['\n'],
     });
 
-    const conclusion = completion.choices[0].text.trim();
+    const conclusion = completion.choices?.[0]?.message?.content?.trim() ?? '';
     return response
       .setHeader('Content-Type', 'application/json')
       .status(200)
