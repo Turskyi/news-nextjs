@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={inter.className}>
+    <div className={`${inter.className} app-container`}>
       <Head>
         <title key="title">News Glance</title>
         <meta name="description" key="description" content="News" />
@@ -22,9 +22,11 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <NextNProgress />
       <NavBar />
-      <Container className={styles.pageContainer}>
-        <Component {...pageProps} />
-      </Container>
+      <div className="content-container">
+        <Container className={styles.pageContainer}>
+          <Component {...pageProps} />
+        </Container>
+      </div>
       <Footer />
     </div>
   );

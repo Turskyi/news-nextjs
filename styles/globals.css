@@ -15,6 +15,13 @@
 }
 
 html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+}
+
+html,
 body {
   max-width: 100vw;
   min-height: 100vh;
@@ -23,11 +30,32 @@ body {
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+  /* Prevents the background from repeating */
+  background-repeat: no-repeat;
+  /* Ensures the background stays fixed */
+  background-attachment: fixed;
+  /* Ensures the gradient covers the entire viewport */
+  background-size: cover;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-container {
+  /* Ensures the content takes up available space */
+  flex: 1;
+}
+
+footer {
+  /* Pushes the footer to the bottom */
+  margin-top: auto;
 }
 
 a {
