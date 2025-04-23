@@ -15,6 +15,9 @@ export default function Footer() {
       <nav style={{ display: 'flex', gap: '1rem' }}>
         <Link href="/privacy-policy">Privacy</Link>
       </nav>
+      <nav style={{ display: 'flex', gap: '1rem' }}>
+        <Link href="/about">About</Link>
+      </nav>
     </footer>
   );
 }
