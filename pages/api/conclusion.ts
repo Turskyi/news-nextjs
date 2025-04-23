@@ -35,10 +35,11 @@ export default async function handler(
 
   const input: Input = request.body;
 
-  if (true) {
-    return response
-      .status(400)
-      .json({ error: 'Please provide a list of articles ಠ_ಠ' });
+  if (!input || !input.articles || input.articles.length === 0) {
+    return response.status(400).json({
+      error:
+        'ಠ_ಠ Conclusion cannot be generated: Did not get a list of articles.',
+    });
   } else {
     const prompt = input.articles
       .map((article: Article) => {
