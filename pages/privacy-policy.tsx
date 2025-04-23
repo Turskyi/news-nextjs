@@ -19,15 +19,13 @@ export default function PrivacyPolicy() {
               <a href="#information-we-collect">Information We Collect</a>
             </li>
             <li>
-              <a href="#how-we-use-your-information">
-                How We Use Your Information
-              </a>
-            </li>
-            <li>
               <a href="#data-retention">Data Retention</a>
             </li>
             <li>
               <a href="#third-party-services">Third-Party Services</a>
+            </li>
+            <li>
+              <a href="#analytics-tracking">Analytics and Tracking</a>
             </li>
             <li>
               <a href="#user-rights">User Rights</a>
@@ -46,67 +44,72 @@ export default function PrivacyPolicy() {
           <p>
             At News Glance, we are committed to protecting your personal
             information and your right to privacy. This Privacy Policy applies
-            to all information collected through our website.
+            to all information collected through our app and website, including
+            mobile, web, and desktop platforms.
           </p>
           <p>
-            <strong>Last Revised: July 15, 2024</strong>
+            <strong>Last Revised: April 22, 2025</strong>
           </p>
         </section>
 
         <section id="information-we-collect">
           <h2>Information We Collect</h2>
           <p>
-            We collect personal information that you voluntarily provide to us
-            when you use our website. The personal information that we collect
-            depends on the context of your interactions with us and the website,
-            the choices you make, and the features you use.
-          </p>
-        </section>
-
-        <section id="how-we-use-your-information">
-          <h2>How We Use Your Information</h2>
-          <p>
-            We use personal information collected via our website for a variety
-            of business purposes described below. We process your personal
-            information for these purposes in reliance on our legitimate
-            business interests, in order to enter into or perform a contract
-            with you, with your consent, and/or for compliance with our legal
-            obligations.
+            We do not collect any personal information from users of our app or
+            website. News Glance does not require you to sign up, log in, or
+            provide any personal data to access its core features.
           </p>
         </section>
 
         <section id="data-retention">
           <h2>Data Retention</h2>
           <p>
-            We retain your personal information for as long as necessary to
-            fulfill the purposes outlined in this privacy policy unless
-            otherwise required by law.
+            Since we do not collect any personal information, we do not retain
+            any user data. No personal data is stored or processed on our
+            servers.
           </p>
         </section>
 
         <section id="third-party-services">
           <h2>Third-Party Services</h2>
           <p>
-            We may share your data with third-party service providers to help us
-            provide and improve our services. These third parties are obligated
-            to protect your information and use it only for the purposes we
-            specify.
+            News Glance does not collect or share any personal information.
+            However, third-party platforms such as the Apple App Store, embedded
+            web views, and other third-party services may collect data in
+            accordance with their own privacy policies. This may include
+            tracking information, cookies, or location data. We encourage users
+            to review the privacy practices of these third-party services.
+          </p>
+        </section>
+
+        <section id="analytics-tracking">
+          <h2>Analytics and Tracking</h2>
+          <p>
+            News Glance does not collect personal information, but we may use
+            third-party analytics services, such as Google Analytics or
+            Firebase, to track app performance and usage data. These services
+            collect anonymous usage data, which helps us improve the app
+            experience. The data collected by these services is subject to their
+            respective privacy policies.
           </p>
         </section>
 
         <section id="user-rights">
           <h2>User Rights</h2>
           <p>
-            Depending on your location, you may have the following rights
-            regarding your personal information:
+            Since News Glance does not collect or process personal information,
+            we do not store any user data. However, depending on your location,
+            including under the General Data Protection Regulation (GDPR) or the
+            California Consumer Privacy Act (CCPA), you may have certain rights
+            regarding your personal data, which would apply to third-party
+            services that collect data (such as the Apple App Store or external
+            web views).
           </p>
-          <ul>
-            <li>Access to your personal data</li>
-            <li>Correction of inaccurate data</li>
-            <li>Deletion of your personal data</li>
-            <li>Objection to processing</li>
-            <li>Data portability</li>
-          </ul>
+          <p>
+            Please note that if you navigate to external sites via the WebView,
+            any data collection or actions on those websites are outside of our
+            control and responsibility.
+          </p>
         </section>
 
         <section id="updates-to-this-policy">
