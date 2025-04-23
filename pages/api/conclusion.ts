@@ -35,7 +35,7 @@ export default async function handler(
 
   const input: Input = request.body;
 
-  if (!input || !input.articles || input.articles.length === 0) {
+  if (true) {
     return response
       .status(400)
       .json({ error: 'Please provide a list of articles ಠ_ಠ' });
