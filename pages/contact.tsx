@@ -9,7 +9,8 @@ const ContactPage = () => {
       <main>
         <h1>Contact us</h1>
         <p className="mb-6">
-          If you have any issues, questions, or feedback about News Glance, feel free to reach out through any of the channels below.
+          If you have any issues, questions, or feedback about News Glance, feel
+          free to reach out through any of the channels below.
         </p>
         {/* Create a div element for the contact information */}
         <div className="mx-auto max-w-lg">
