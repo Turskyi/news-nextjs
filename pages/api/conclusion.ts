@@ -35,7 +35,7 @@ export default async function handler(
 
   const input: Input = request.body;
 
-  if (true) {
+  if (!input || !input.articles || input.articles.length === 0) {
     return response.status(400).json({
       error:
         'ಠ_ಠ Conclusion cannot be generated: ' +
