@@ -63,22 +63,23 @@ export default async function handler(
       messages: [
         {
           role: 'system',
-          content: `You are a helpful assistant generating a single-sentence, plain-language "daily heads-up" for people who don’t follow the news.`,
+          content: `You are a seasoned news analyst. Your job is to determine what, if anything, a regular person should do in response.`,
         },
         {
           role: 'user',
-          content: `You are a helpful assistant generating a single-sentence, plain-language "daily heads-up" for people who don’t follow the news.
+          content: `Based on the news below, draw a conclusion.
 
-          Carefully read **all** of the following news articles before writing your answer. Think deeply about their overall meaning.
-          
-          Your task is to write **one clear sentence** that captures the most important thing a person should know today. Don't summarize every article. Don’t just take the first or last item. Instead, figure out what matters most in the big picture — the thing that might affect people's thinking, mood, or decisions.
-          
-          Write like a smart friend giving a quick heads-up. Use plain language, and include an emoji if it helps. Format your response in markdown format.
-          
-          News:
-          ${prompt}
-          
-          Conclusion:`,
+Your answer should clearly respond to this question:  
+"Is there any action you personally should take other than staying informed?"
+
+- The response should be one or two sentences, plain and clear.
+- Use emojis if they help clarify or draw attention.
+- Format your output in Markdown.
+
+News:
+${prompt}
+
+Conclusion:`,
         },
       ],
       max_tokens: 80,
@@ -86,7 +87,8 @@ export default async function handler(
       stop: ['\n'],
     });
 
-    const conclusion = completion.choices?.[0]?.message?.content?.trim() ?? '';
+    const conclusion =
+      completion.choices?.[0]?.message?.content?.trim() ?? 'No conclusion.';
     return response
       .setHeader('Content-Type', 'application/json')
       .status(200)

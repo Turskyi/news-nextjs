@@ -75,14 +75,10 @@ export default async function handler(
         {
           role: 'system',
           content: `You are a seasoned news analyst tasked with drawing overall conclusion from a series of news articles.
+    
+         You should answer on question "Is there any action you personally should take other than staying informed?".
         
-        Your goal is to synthesize the following news articles into a SINGLE, EXTREMELY CONCISE conclusion that captures the most important common theme, trend, or the most important overall takeaway. Your conclusion should be a single sentence, or at most two short sentences.
-        
-        Focus ONLY on the core overarching conclusion.
-        
-        If there's one article that stands out as significantly more important than the others, identify it and ignore the rest.
-        
-        Keep it as brief and direct as possible.
+        It should be one or two sentence max.
         
         Use emojis when is appropriate.
         
@@ -98,8 +94,7 @@ export default async function handler(
     });
 
     const conclusion =
-      completion.choices[0]?.message?.content?.trim() ??
-      'No conclusion generated.';
+      completion.choices[0]?.message?.content?.trim() ?? 'No conclusion.';
 
     cache = {
       conclusion,
