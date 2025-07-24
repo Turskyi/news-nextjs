@@ -22,6 +22,11 @@ interface Cache {
 
 let cache: Cache | null = null;
 
+/**
+ * API endpoint that provides news conclusions in plain text format.
+ * Since this response may be used with the mobile app's text-to-speech feature,
+ * we avoid using Markdown, emojis, or any non-text formatting.
+ */
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -78,11 +83,7 @@ export default async function handler(
     
          You should answer on question "Is there any action you personally should take other than staying informed?".
         
-        It should be one or two sentence max.
-        
-        Use emojis when is appropriate.
-        
-        Format your output in Markdown.`,
+        It should be two sentence max.`,
         },
         ...messages,
         { role: 'user', content: 'Conclusion:' },

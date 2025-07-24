@@ -15,6 +15,11 @@ interface Input {
   articles: Article[];
 }
 
+/**
+ * API endpoint for generating news conclusions.
+ * No server-side caching is implemented as this endpoint is designed to work
+ * exclusively with SWR (stale-while-revalidate) caching on the web client.
+ */
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
