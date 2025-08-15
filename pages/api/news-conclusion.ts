@@ -81,7 +81,7 @@ export default async function handler(
           role: 'system',
           content: `You are a seasoned news analyst tasked with drawing overall conclusion from a series of news articles.
     
-         You should answer on question "Is there any action you personally should take other than staying informed?".
+         You should answer on question "What action you personally should take other than staying informed if any?".
         
         It should be two sentence max.`,
         },
