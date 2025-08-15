@@ -75,7 +75,7 @@ export default async function handler(
           content: `Based on the news below, draw a conclusion.
 
 Your answer should clearly respond to this question:  
-"What action you personally should take other than staying informed if any?"
+"What action reader personally should take other than staying informed if any?"
 
 - The response should be one or two sentences, plain and clear.
 - Use emojis if they help clarify or draw attention.
