@@ -15,7 +15,10 @@ export const getConclusionWithFallback = async (
   } catch (groqError) {
     console.error('Groq failed, trying Mistral:', groqError);
     try {
-      const mistralResponse = await getMistralConclusion(systemPrompt, userPrompt);
+      const mistralResponse = await getMistralConclusion(
+        systemPrompt,
+        userPrompt,
+      );
       if (mistralResponse) {
         return mistralResponse;
       }
@@ -23,7 +26,10 @@ export const getConclusionWithFallback = async (
     } catch (mistralError) {
       console.error('Mistral failed, trying Gemini:', mistralError);
       try {
-        const geminiResponse = await getGeminiConclusion(systemPrompt, userPrompt);
+        const geminiResponse = await getGeminiConclusion(
+          systemPrompt,
+          userPrompt,
+        );
         if (geminiResponse) {
           return geminiResponse;
         }
