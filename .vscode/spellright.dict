@@ -36,3 +36,6 @@ text-lg
 mt
 pl-6
 lg
+commonjs
+ts
+tsx

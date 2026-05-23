@@ -77,6 +77,9 @@ export default function PrivacyPolicyAndroid() {
             specify. Examples include:
           </p>
           <ul>
+            <li>
+              AI Providers (Groq, Mistral, Google) for generating conclusions
+            </li>
             <li>Analytics providers</li>
             <li>Cloud storage providers</li>
             <li>Customer support platforms</li>

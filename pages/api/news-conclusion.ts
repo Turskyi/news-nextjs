@@ -1,18 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-interface Article {
-  title: string;
-  description: string;
-  articleText: string;
-}
+import { ConclusionArticle } from '../../models/ConclusionArticle';
+import { NEWS_CONCLUSION_SYSTEM_PROMPT, NEWS_CONCLUSION_USER_PROMPT } from '../../constants/prompts';
+import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 
 interface Input {
-  articles: Article[];
+  articles: ConclusionArticle[];
 }
 
 interface Cache {
@@ -51,60 +43,38 @@ export default async function handler(
     return response
       .status(400)
       .json({ error: 'Please provide a list of articles ಠ_ಠ' });
-  } else {
-    const now = Date.now();
-
-    const fourHours = 4 * 60 * 60 * 1000;
-
-    if (cache && now - cache.timestamp < fourHours) {
-      return response.status(200).json({ conclusion: cache.conclusion });
-    }
-
-    const messages = input.articles.map((article: Article) => {
-      let content = `Title: ${article.title}`;
-      if (article.description) {
-        content += `\nDescription: ${article.description}`;
-      }
-      if (article.articleText) {
-        content += `\nText: ${article.articleText}`;
-      }
-      return {
-        role: 'user' as const,
-        content,
-      };
-    });
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a seasoned news analyst tasked with drawing overall conclusion from a series of news articles.
-    
-         You should answer on question "What action reader personally should take other than staying informed if any?".
-        
-        It should be two sentence max.`,
-        },
-        ...messages,
-        { role: 'user', content: 'Conclusion:' },
-      ],
-      max_tokens: 500,
-      temperature: 1,
-      presence_penalty: 0,
-      frequency_penalty: 0,
-    });
-
-    const conclusion =
-      completion.choices[0]?.message?.content?.trim() ?? 'No conclusion.';
-
-    cache = {
-      conclusion,
-      timestamp: now,
-    };
-
-    return response
-      .setHeader('Content-Type', 'application/json')
-      .status(200)
-      .json({ conclusion });
   }
+
+  const now = Date.now();
+  const fourHours = 4 * 60 * 60 * 1000;
+
+  if (cache && now - cache.timestamp < fourHours) {
+    return response.status(200).json({ conclusion: cache.conclusion });
+  }
+
+  const newsString = input.articles.map((article: ConclusionArticle) => {
+    let content = `Title: ${article.title}`;
+    if (article.description) {
+      content += `\nDescription: ${article.description}`;
+    }
+    if (article.articleText) {
+      content += `\nText: ${article.articleText}`;
+    }
+    return content;
+  }).join('\n\n');
+
+  const conclusion = await getConclusionWithFallback(
+    NEWS_CONCLUSION_SYSTEM_PROMPT,
+    NEWS_CONCLUSION_USER_PROMPT(newsString),
+  );
+
+  cache = {
+    conclusion,
+    timestamp: now,
+  };
+
+  return response
+    .setHeader('Content-Type', 'application/json')
+    .status(200)
+    .json({ conclusion });
 }

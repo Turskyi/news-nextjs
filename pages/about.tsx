@@ -14,7 +14,7 @@ const AboutPage = () => {
       <main className="p-6 max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-4">About News Glance</h1>
         <p className="mb-4">
-          <strong>News Glance</strong> is a minimalist, AI-powered news app that
+          <strong>News Glance</strong> is a minimalist, modern AI-powered news app that
           gives you the one thing you need every day: a smart, simple
           conclusion. At the top of the app, you&apos;ll find a single-sentence
           summary of today’s most important news — helping you understand the
@@ -22,7 +22,7 @@ const AboutPage = () => {
         </p>
         <h2 className="text-2xl font-semibold mt-6 mb-2">Key Features</h2>
         <ul className="list-disc pl-6 mb-4">
-          <li>🧠 AI-generated daily conclusion, based on top global news</li>
+          <li>🧠 Modern AI-generated daily conclusion, based on top global news</li>
           <li>📰 Scrollable list of curated headlines with summaries</li>
           <li>🔗 Read full articles directly from trusted sources</li>
           <li>📲 Home screen widget to keep the conclusion always visible</li>

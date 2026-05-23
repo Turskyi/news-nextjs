@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { NewsArticle } from '@/models/NewsArticles';
+import { ConclusionArticle } from '@/models/ConclusionArticle';
 import NewsArticleGrid from '@/components/NewsArticleGrid';
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
@@ -32,7 +33,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   // Create a state variable for the conclusion data
   const [conclusion, setConclusion] = useState('');
   const fetchConclusion = useCallback(async () => {
-    const articles = newsArticles.slice(0, NEWS_MAX).map((article) => ({
+    const articles: ConclusionArticle[] = newsArticles.slice(0, NEWS_MAX).map((article) => ({
       title: article.title,
       description: article.description,
       articleText: article.content,
@@ -78,7 +79,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         {/* Add a description meta tag that summarizes the content of your page */}
         <meta
           name="description"
-          content="A website that displays top ten news articles and uses AI to generate a conclusion based on the first five titles."
+          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
         />
         {/* Add some keywords meta tag that are relevant to your page */}
         <meta
@@ -90,7 +91,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         <meta property="og:title" content="News Glance" />
         <meta
           property="og:description"
-          content="A website that displays top ten news articles and uses AI to generate a conclusion based on the first five titles."
+          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
         />
         {/* Use the og:image meta tag to specify an image that will be displayed when your page is shared */}
         {/* You can use any image URL that is publicly accessible */}
@@ -103,7 +104,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         <meta name="twitter:title" content="News Glance" />
         <meta
           name="twitter:description"
-          content="A website that displays top ten news articles and uses AI to generate a conclusion based on the first five titles."
+          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
         />
         {/* Use the twitter:image meta tag to specify an image that will be displayed when your page is shared on Twitter */}
         {/* You can use the same image URL as the og:image meta tag */}

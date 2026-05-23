@@ -73,7 +73,7 @@ This project was built using the following technologies and tools:
 - [News API](https://newsapi.org): A simple and easy-to-use API that returns
   JSON metadata for headlines and articles live all over the web.
 
-- **Ai Api** : https://platform.openai.com/docs/api-reference;
+- **Ai Api** : [Groq](https://groq.com), [Mistral](https://mistral.ai), [Gemini](https://ai.google.dev);
 
 - Architectural pattern:
   [Monolith](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#all-in-one-applications);

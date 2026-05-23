@@ -4,9 +4,13 @@
   "editor.wordWrap": "wordWrapColumn",
   "editor.wordWrapColumn": 80,
   "prettier.printWidth": 80,
-  "editor.rulers": [80],
+  "editor.rulers": [
+    80
+  ],
   "prettier.trailingComma": "all",
-  "spellright.language": ["en"],
+  "spellright.language": [
+    "en"
+  ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

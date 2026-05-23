@@ -74,11 +74,15 @@ export default function PrivacyPolicy() {
           <h2>Third-Party Services</h2>
           <p>
             News Glance does not collect or share any personal information.
-            However, third-party platforms such as the Apple App Store, embedded
-            web views, and other third-party services may collect data in
-            accordance with their own privacy policies. This may include
-            tracking information, cookies, or location data. We encourage users
-            to review the privacy practices of these third-party services.
+            However, we utilize third-party AI providers including Groq,
+            Mistral, and Google (Gemini) as data processors to generate news
+            conclusions. These providers process news article content to
+            provide summaries and insights. Additionally, third-party platforms
+            such as the Apple App Store, embedded web views, and other
+            third-party services may collect data in accordance with their own
+            privacy policies. This may include tracking information, cookies, or
+            location data. We encourage users to review the privacy practices of
+            these third-party services.
           </p>
         </section>
 

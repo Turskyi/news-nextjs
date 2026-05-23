@@ -1,18 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-interface Article {
-  title: string;
-  description: string;
-  articleText: string;
-}
+import { ConclusionArticle } from '../../models/ConclusionArticle';
+import { CONCLUSION_SYSTEM_PROMPT, CONCLUSION_USER_PROMPT } from '../../constants/prompts';
+import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 
 interface Input {
-  articles: Article[];
+  articles: ConclusionArticle[];
 }
 
 /**
@@ -46,57 +38,31 @@ export default async function handler(
         'ಠ_ಠ Conclusion cannot be generated: ' +
         'Did not get a list of articles.',
     });
-  } else {
-    const prompt = input.articles
-      .map((article: Article) => {
-        let articlePrompt = `Title: ${article.title}`;
-
-        if (article.description) {
-          articlePrompt += `\nDescription: ${article.description}`;
-        }
-
-        if (article.articleText) {
-          articlePrompt += `\nText: ${article.articleText}`;
-        }
-
-        return articlePrompt;
-      })
-      .join('\n\n');
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a seasoned news analyst. Your job is to determine what, if anything, a regular person should do in response.`,
-        },
-        {
-          role: 'user',
-          content: `Based on the news below, draw a conclusion.
-
-Your answer should clearly respond to this question:  
-"What action reader personally should take other than staying informed if any?"
-
-- The response should be one or two sentences, plain and clear.
-- Use emojis if they help clarify or draw attention.
-- Format your output in Markdown.
-
-News:
-${prompt}
-
-Conclusion:`,
-        },
-      ],
-      max_tokens: 80,
-      temperature: 0.6,
-      stop: ['\n'],
-    });
-
-    const conclusion =
-      completion.choices?.[0]?.message?.content?.trim() ?? 'No conclusion.';
-    return response
-      .setHeader('Content-Type', 'application/json')
-      .status(200)
-      .json({ conclusion });
   }
+
+  const newsString = input.articles
+    .map((article: ConclusionArticle) => {
+      let articlePrompt = `Title: ${article.title}`;
+
+      if (article.description) {
+        articlePrompt += `\nDescription: ${article.description}`;
+      }
+
+      if (article.articleText) {
+        articlePrompt += `\nText: ${article.articleText}`;
+      }
+
+      return articlePrompt;
+    })
+    .join('\n\n');
+
+  const conclusion = await getConclusionWithFallback(
+    CONCLUSION_SYSTEM_PROMPT,
+    CONCLUSION_USER_PROMPT(newsString),
+  );
+
+  return response
+    .setHeader('Content-Type', 'application/json')
+    .status(200)
+    .json({ conclusion });
 }
