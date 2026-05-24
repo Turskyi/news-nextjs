@@ -9,14 +9,15 @@ interface NewsArticleEntryProps {
 }
 
 const NewsArticleEntry = ({
-  article: { title, description: description, url, urlToImage },
+  article: { title, description, url, urlToImage },
 }: NewsArticleEntryProps) => {
   const validImageUrl =
     urlToImage?.startsWith('http://') || urlToImage?.startsWith('https://')
       ? urlToImage
       : undefined;
+
   return (
-    <a href={url}>
+    <a href={url || '#'}>
       <Card className="h-100">
         <Image
           unoptimized
@@ -27,8 +28,8 @@ const NewsArticleEntry = ({
           className={`card-img-top ${styles.image}`}
         />
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>{description}</Card.Text>
+          <Card.Title>{title || 'No Title Available'}</Card.Title>
+          <Card.Text>{description || 'No description available.'}</Card.Text>
         </Card.Body>
       </Card>
     </a>

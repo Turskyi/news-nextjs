@@ -34,8 +34,17 @@ export const getStaticProps: GetStaticProps<CountryNewsPageProps> = async ({
     `https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${process.env.NEWS_API_KEY}`,
   );
   const newsResponse: NewsResponse = await response.json();
+
+  if (!response.ok) {
+    console.error('Country fetch error:', newsResponse);
+    return {
+      props: { newsArticles: [] },
+      revalidate: 5 * 60,
+    };
+  }
+
   return {
-    props: { newsArticles: newsResponse.articles },
+    props: { newsArticles: newsResponse.articles || [] },
     revalidate: 5 * 60,
   };
   // let error go to 500 page

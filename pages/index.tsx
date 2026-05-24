@@ -44,11 +44,13 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   // Create a state variable for the conclusion data
   const [conclusion, setConclusion] = useState('');
   const fetchConclusion = useCallback(async () => {
-    const articles: ConclusionArticle[] = newsArticles.slice(0, NEWS_MAX).map((article) => ({
-      title: article.title,
-      description: article.description,
-      articleText: article.content,
-    }));
+    const articles: ConclusionArticle[] = newsArticles
+      .slice(0, NEWS_MAX)
+      .map((article) => ({
+        title: article.title ?? '',
+        description: article.description ?? '',
+        articleText: article.content ?? '',
+      }));
 
     const response = await fetch('/api/news-conclusion', {
       method: 'POST',
