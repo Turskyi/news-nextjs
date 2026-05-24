@@ -139,8 +139,8 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
           </h1>
           {insight && (
             <p className="text-slate-500 transition-opacity duration-1000">
-              AI-powered actionable insights from today's comprehensive news
-              analysis
+              AI-powered actionable insights from today&apos;s comprehensive
+              news analysis
             </p>
           )}
         </header>
