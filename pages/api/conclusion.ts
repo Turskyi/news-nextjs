@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
-import { CONCLUSION_SYSTEM_PROMPT, CONCLUSION_USER_PROMPT } from '../../constants/prompts';
+import { NEWS_CONCLUSION_SYSTEM_PROMPT, NEWS_CONCLUSION_USER_PROMPT } from '../../constants/prompts';
 import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 
 interface Input {
@@ -57,8 +57,8 @@ export default async function handler(
     .join('\n\n');
 
   const conclusion = await getConclusionWithFallback(
-    CONCLUSION_SYSTEM_PROMPT,
-    CONCLUSION_USER_PROMPT(newsString),
+    NEWS_CONCLUSION_SYSTEM_PROMPT,
+    NEWS_CONCLUSION_USER_PROMPT(newsString),
   );
 
   return response

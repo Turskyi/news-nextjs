@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
-import { NEWS_CONCLUSION_SYSTEM_PROMPT, NEWS_CONCLUSION_USER_PROMPT } from '../../constants/prompts';
+import { ACTIONABLE_INSIGHT_SYSTEM_PROMPT, ACTIONABLE_INSIGHT_USER_PROMPT } from '../../constants/prompts';
 import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 import { ActionableInsight, SignalLevel, InsightCategory } from '../../models/ActionableInsight';
 
@@ -9,7 +9,7 @@ interface Input {
 }
 
 interface Cache {
-  conclusion: string;
+  insight: ActionableInsight;
   timestamp: number;
 }
 
@@ -36,41 +36,46 @@ export default async function handler(
   const input: Input = request.body;
 
   if (!input || !input.articles || input.articles.length === 0) {
-    return response
-      .status(400)
-      .json({ error: 'Please provide a list of articles ಠ_ಠ' });
+    return response.status(400).json({ error: 'Missing articles' });
   }
 
   const now = Date.now();
   const fourHours = 4 * 60 * 60 * 1000;
 
   if (cache && now - cache.timestamp < fourHours) {
-    return response.status(200).json({ conclusion: cache.conclusion });
+    return response.status(200).json(cache.insight);
   }
 
   const newsString = input.articles.map((article: ConclusionArticle) => {
     let content = `Title: ${article.title}`;
-    if (article.description) {
-      content += `\nDescription: ${article.description}`;
-    }
-    if (article.articleText) {
-      content += `\nText: ${article.articleText}`;
-    }
+    if (article.description) content += `\nDescription: ${article.description}`;
+    if (article.articleText) content += `\nText: ${article.articleText}`;
     return content;
   }).join('\n\n');
 
-  const conclusion = await getConclusionWithFallback(
-    NEWS_CONCLUSION_SYSTEM_PROMPT,
-    NEWS_CONCLUSION_USER_PROMPT(newsString),
+  const rawResponse = await getConclusionWithFallback(
+    ACTIONABLE_INSIGHT_SYSTEM_PROMPT,
+    ACTIONABLE_INSIGHT_USER_PROMPT(newsString),
   );
 
-  cache = {
-    conclusion,
-    timestamp: now,
-  };
+  try {
+    const jsonString = rawResponse.replace(/```json\n?|\n?```/g, '').trim();
+    const insight: ActionableInsight = JSON.parse(jsonString);
 
-  return response
-    .setHeader('Content-Type', 'application/json')
-    .status(200)
-    .json({ conclusion });
+    cache = {
+      insight,
+      timestamp: now,
+    };
+
+    return response.status(200).json(insight);
+  } catch (error) {
+    console.error('Failed to parse AI response:', rawResponse);
+    const fallback: ActionableInsight = {
+      conclusion: rawResponse,
+      level: SignalLevel.NEUTRAL,
+      probability: 0,
+      category: InsightCategory.GENERAL,
+    };
+    return response.status(200).json(fallback);
+  }
 }
