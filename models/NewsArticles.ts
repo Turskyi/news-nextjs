@@ -1,11 +1,11 @@
 export interface NewsArticle {
-    author: string,
-    title: string,
-    description: string,
-    url: string,
-    urlToImage?: string,
-    publishedAt: string,
-    content: string,
+    author?: string | null,
+    title?: string | null,
+    description?: string | null,
+    url?: string,
+    urlToImage?: string | null,
+    publishedAt?: string | null,
+    content?: string | null,
 }
 
 export interface NewsResponse {

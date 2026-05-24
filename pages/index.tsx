@@ -18,15 +18,26 @@ interface ConclusionResponse {
 
 export const getServerSideProps: GetServerSideProps<
   NewsPageProps
-> = async () => {
+> = async (context) => {
+  const host = context.req.headers.host;
+  const protocol = host?.includes('localhost') ? 'http' : 'https';
+  const baseUrl = `${protocol}://${host}/`;
+
   const response = await fetch(
-    BASE_URL + 'api/news?country=' + DEFAULT_COUNTRY_CODE,
+    baseUrl + 'api/news?country=' + DEFAULT_COUNTRY_CODE,
   );
+
+  if (!response.ok) {
+    console.error('Failed to fetch news:', response.statusText);
+    return {
+      props: { newsArticles: [] },
+    };
+  }
+
   const newsResponse: NewsArticle[] = await response.json();
   return {
     props: { newsArticles: newsResponse },
   };
-  // let error go to 500 page
 };
 
 export default function NewsPage({ newsArticles }: NewsPageProps) {
@@ -54,7 +65,7 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   useEffect(() => {
     if (newsArticles.length > 0) {
       fetchConclusion().then((data) => {
-        if (data) {
+        if (data && data.conclusion) {
           setConclusion(data.conclusion);
         }
       });
@@ -62,12 +73,12 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   }, [newsArticles, fetchConclusion]);
 
   const { data } = useSWR<ConclusionResponse>(
-    '/api/conclusion',
+    newsArticles.length > 0 ? '/api/conclusion' : null,
     fetchConclusion,
   );
 
   useEffect(() => {
-    if (data) {
+    if (data && data.conclusion) {
       setConclusion(data.conclusion);
     }
   }, [data]);

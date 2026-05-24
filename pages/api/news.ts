@@ -21,11 +21,32 @@ export default async function handler(
     return response.status(200).end();
   }
 
-  const countryCode = request.query.country || DEFAULT_COUNTRY_CODE;
+  const countryCodeQuery = request.query.country;
+  const countryCode: string =
+    typeof countryCodeQuery === 'string'
+      ? countryCodeQuery
+      : DEFAULT_COUNTRY_CODE;
 
-  const result = await fetch(
-    `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=${process.env.NEWS_API_KEY}`,
-  );
+  let url: string;
+  if (
+    countryCode.toLowerCase() === 'intl' ||
+    countryCode.toLowerCase() === 'international'
+  ) {
+    const sources =
+      'bbc-news,cnn,reuters,al-jazeera-english,the-wall-street-journal';
+    url = `https://newsapi.org/v2/top-headlines?sources=${sources}&apiKey=${process.env.NEWS_API_KEY}`;
+  } else {
+    url = `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=${process.env.NEWS_API_KEY}`;
+  }
+
+  const result = await fetch(url);
+
+  if (!result.ok) {
+    const errorData = await result.json();
+    console.error('News API error:', errorData);
+    return response.status(result.status).json(errorData);
+  }
+
   const newsResponse: NewsResponse = await result.json();
-  return response.status(200).json(newsResponse.articles);
+  return response.status(200).json(newsResponse.articles || []);
 }
