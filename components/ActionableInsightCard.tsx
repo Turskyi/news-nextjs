@@ -13,38 +13,38 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
     switch (level) {
       case SignalLevel.CRITICAL:
         return {
-          bg: 'bg-red-50 border-red-200',
-          text: 'text-red-700',
-          accent: 'bg-red-600',
-          light: 'bg-red-500 animate-pulse',
+          bg: '#fef2f2',
+          border: '#fecaca',
+          text: '#b91c1c',
+          light: '#ef4444',
           icon: '🚨',
           label: 'Critical Action',
         };
       case SignalLevel.WARNING:
         return {
-          bg: 'bg-amber-50 border-amber-200',
-          text: 'text-amber-700',
-          accent: 'bg-amber-500',
-          light: 'bg-amber-500',
+          bg: '#fffbeb',
+          border: '#fde68a',
+          text: '#b45309',
+          light: '#f59e0b',
           icon: '⚠️',
           label: 'Warning',
         };
       case SignalLevel.ADVISORY:
         return {
-          bg: 'bg-blue-50 border-blue-200',
-          text: 'text-blue-700',
-          accent: 'bg-blue-600',
-          light: 'bg-blue-500',
+          bg: '#eff6ff',
+          border: '#bfdbfe',
+          text: '#1d4ed8',
+          light: '#3b82f6',
           icon: 'ℹ️',
           label: 'Advisory',
         };
       case SignalLevel.NEUTRAL:
       default:
         return {
-          bg: 'bg-emerald-50 border-emerald-200',
-          text: 'text-emerald-700',
-          accent: 'bg-emerald-500',
-          light: 'bg-emerald-500',
+          bg: '#ecfdf5',
+          border: '#a7f3d0',
+          text: '#047857',
+          light: '#10b981',
           icon: '✅',
           label: 'All Clear',
         };
@@ -53,71 +53,99 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
 
   const styles = getStyles(insight.level);
   const isHighRisk =
-    insight.level !== SignalLevel.NEUTRAL && insight.probability > 0.8;
+    insight.level !== SignalLevel.NEUTRAL && insight.probability >= 0.8;
 
   return (
     <div
-      className={`border-2 ${styles.bg}`}
-      style={{ borderRadius: '3.5rem' }}
+      style={{
+        backgroundColor: styles.bg,
+        border: `2px solid ${styles.border}`,
+        borderRadius: '4rem',
+        padding: '3rem 4rem',
+        marginBottom: '2rem',
+        fontFamily: 'sans-serif',
+      }}
     >
-      <div className="p-12 md:p-20 lg:p-24">
-        <div className="mb-10 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-white text-5xl shadow-sm">
-              {styles.icon}
-            </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className={`h-2 w-2 rounded-full ${styles.light}`}></span>
-                <h3
-                  className={`text-xs font-bold uppercase tracking-widest ${styles.text}`}
-                >
-                  {styles.label}
-                </h3>
-              </div>
-              <div className="mt-0.5 flex items-center gap-2 text-sm text-slate-500">
-                <span>{insight.category}</span>
-                <span>•</span>
-                <span
-                  className={
-                    isHighRisk ? 'font-bold text-red-600' : 'text-slate-500'
-                  }
-                >
-                  {Math.round(insight.probability * 100)}% Probability
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="hidden sm:block">
-            <div className="h-2 w-32 overflow-hidden rounded-full bg-slate-200/50">
-              <div
-                className={`h-full ${styles.accent} transition-all duration-1000`}
-                style={{ width: `${insight.probability * 100}%` }}
-              ></div>
-            </div>
-          </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <div
+          style={{
+            fontSize: '3.5rem',
+            backgroundColor: 'white',
+            width: '5rem',
+            height: '5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '1.5rem',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          }}
+        >
+          {styles.icon}
         </div>
-
-        <div className="relative">
-          <div className="text-xl font-medium leading-relaxed text-slate-800 md:text-2xl">
-            <ReactMarkdown
-              components={{
-                p: ({ children }) => <p className="m-0">{children}</p>,
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div
+              style={{
+                width: '0.75rem',
+                height: '0.75rem',
+                backgroundColor: styles.light,
+                borderRadius: '50%',
+              }}
+            />
+            <h3
+              style={{
+                margin: 0,
+                fontSize: '0.875rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: styles.text,
               }}
             >
-              {insight.conclusion}
-            </ReactMarkdown>
+              {styles.label}
+            </h3>
+          </div>
+          <div
+            style={{
+              marginTop: '0.25rem',
+              fontSize: '1rem',
+              color: '#64748b',
+              fontWeight: 500,
+            }}
+          >
+            <span style={{ textTransform: 'uppercase' }}>
+              {insight.category}
+            </span>
+            <span style={{ margin: '0 0.5rem', opacity: 0.5 }}>•</span>
+            <span style={{ color: isHighRisk ? '#dc2626' : 'inherit', fontWeight: isHighRisk ? 700 : 500 }}>
+              {Math.round(insight.probability * 100)}% Probability
+            </span>
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 flex flex-wrap gap-2 sm:hidden">
-          <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-            <div
-              className={`h-full ${styles.accent}`}
-              style={{ width: `${insight.probability * 100}%` }}
-            ></div>
-          </div>
-        </div>
+      <div
+        style={{
+          fontSize: '1.5rem',
+          lineHeight: 1.6,
+          fontWeight: 500,
+          color: '#1e293b',
+        }}
+      >
+        <ReactMarkdown
+          components={{
+            p: ({ children }) => <p style={{ margin: 0 }}>{children}</p>,
+          }}
+        >
+          {insight.conclusion}
+        </ReactMarkdown>
       </div>
     </div>
   );
