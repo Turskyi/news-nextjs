@@ -158,9 +158,15 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
           </div>
         )}
 
-        {insight && <ActionableInsightCard insight={insight} />}
+        {insight && (
+          <div style={{ marginBottom: '2rem' }}>
+            <ActionableInsightCard insight={insight} />
+          </div>
+        )}
 
-        <NewsArticleGrid articles={newsArticles} />
+        <div style={{ marginTop: '2rem' }}>
+          <NewsArticleGrid articles={newsArticles} />
+        </div>
       </main>
     </>
   );

@@ -16,14 +16,16 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           bg: 'bg-red-50 border-red-200',
           text: 'text-red-700',
           accent: 'bg-red-600',
+          light: 'bg-red-500 animate-pulse',
           icon: '🚨',
-          label: 'Critical Action Required',
+          label: 'Critical Action',
         };
       case SignalLevel.WARNING:
         return {
           bg: 'bg-amber-50 border-amber-200',
           text: 'text-amber-700',
           accent: 'bg-amber-500',
+          light: 'bg-amber-500',
           icon: '⚠️',
           label: 'Warning',
         };
@@ -32,48 +34,62 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           bg: 'bg-blue-50 border-blue-200',
           text: 'text-blue-700',
           accent: 'bg-blue-600',
+          light: 'bg-blue-500',
           icon: 'ℹ️',
           label: 'Advisory',
         };
       case SignalLevel.NEUTRAL:
       default:
         return {
-          bg: 'bg-slate-50 border-slate-200',
-          text: 'text-slate-700',
-          accent: 'bg-slate-500',
-          icon: '💡',
-          label: 'Insight',
+          bg: 'bg-emerald-50 border-emerald-200',
+          text: 'text-emerald-700',
+          accent: 'bg-emerald-500',
+          light: 'bg-emerald-500',
+          icon: '✅',
+          label: 'All Clear',
         };
     }
   };
 
   const styles = getStyles(insight.level);
+  const isHighRisk =
+    insight.level !== SignalLevel.NEUTRAL && insight.probability > 0.8;
 
   return (
     <div
-      className={`mb-10 overflow-hidden rounded-2xl border-2 shadow-sm ${styles.bg}`}
+      className={`border-2 ${styles.bg}`}
+      style={{ borderRadius: '3.5rem' }}
     >
-      <div className="p-6 md:p-8">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl shadow-sm">
+      <div className="p-12 md:p-20 lg:p-24">
+        <div className="mb-10 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <span className="flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-white text-5xl shadow-sm">
               {styles.icon}
             </span>
             <div>
-              <h3
-                className={`text-xs font-bold uppercase tracking-widest ${styles.text}`}
-              >
-                {styles.label}
-              </h3>
+              <div className="flex items-center gap-2">
+                <span className={`h-2 w-2 rounded-full ${styles.light}`}></span>
+                <h3
+                  className={`text-xs font-bold uppercase tracking-widest ${styles.text}`}
+                >
+                  {styles.label}
+                </h3>
+              </div>
               <div className="mt-0.5 flex items-center gap-2 text-sm text-slate-500">
                 <span>{insight.category}</span>
                 <span>•</span>
-                <span>{Math.round(insight.probability * 100)}% Probability</span>
+                <span
+                  className={
+                    isHighRisk ? 'font-bold text-red-600' : 'text-slate-500'
+                  }
+                >
+                  {Math.round(insight.probability * 100)}% Probability
+                </span>
               </div>
             </div>
           </div>
           <div className="hidden sm:block">
-            <div className="h-2 w-32 overflow-hidden rounded-full bg-slate-200">
+            <div className="h-2 w-32 overflow-hidden rounded-full bg-slate-200/50">
               <div
                 className={`h-full ${styles.accent} transition-all duration-1000`}
                 style={{ width: `${insight.probability * 100}%` }}

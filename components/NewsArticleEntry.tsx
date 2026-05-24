@@ -17,8 +17,8 @@ const NewsArticleEntry = ({
       : undefined;
 
   return (
-    <a href={url || '#'}>
-      <Card className="h-100">
+    <a href={url || '#'} className="no-underline">
+      <Card className="h-100 overflow-hidden border-0 shadow-sm transition-transform duration-300 hover:scale-[1.02] rounded-[1.5rem]">
         <Image
           unoptimized
           src={validImageUrl || placeholderImage}
@@ -26,10 +26,15 @@ const NewsArticleEntry = ({
           height={200}
           alt="News article image"
           className={`card-img-top ${styles.image}`}
+          style={{ height: '200px' }}
         />
-        <Card.Body>
-          <Card.Title>{title || 'No Title Available'}</Card.Title>
-          <Card.Text>{description || 'No description available.'}</Card.Text>
+        <Card.Body className="p-5">
+          <Card.Title className="mb-3 line-clamp-2 font-bold text-slate-800">
+            {title || 'No Title Available'}
+          </Card.Title>
+          <Card.Text className="line-clamp-3 text-sm text-slate-600">
+            {description || 'No description available.'}
+          </Card.Text>
         </Card.Body>
       </Card>
     </a>
