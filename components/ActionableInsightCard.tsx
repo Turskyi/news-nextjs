@@ -60,52 +60,55 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
       style={{
         backgroundColor: styles.bg,
         border: `2px solid ${styles.border}`,
-        borderRadius: '4rem',
-        padding: '3rem 4rem',
+        borderRadius: '3rem',
+        padding: '2.5rem 3rem',
         marginBottom: '2rem',
-        fontFamily: 'sans-serif',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        transition: 'all 0.3s ease',
       }}
     >
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '1.5rem',
-          marginBottom: '2rem',
+          gap: '1.25rem',
+          marginBottom: '1.75rem',
         }}
       >
         <div
           style={{
-            fontSize: '3.5rem',
+            fontSize: '2.75rem',
             backgroundColor: 'white',
-            width: '5rem',
-            height: '5rem',
+            width: '4.5rem',
+            height: '4.5rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: '1.5rem',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+            borderRadius: '1.25rem',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+            flexShrink: 0,
           }}
         >
           {styles.icon}
         </div>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ flexGrow: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <div
               style={{
-                width: '0.75rem',
-                height: '0.75rem',
+                width: '0.6rem',
+                height: '0.6rem',
                 backgroundColor: styles.light,
                 borderRadius: '50%',
+                boxShadow: `0 0 8px ${styles.light}`,
               }}
             />
             <h3
               style={{
                 margin: 0,
-                fontSize: '0.875rem',
-                fontWeight: 900,
+                fontSize: '1rem',
+                fontWeight: 800,
                 textTransform: 'uppercase',
-                letterSpacing: '0.1em',
+                letterSpacing: '0.15em',
                 color: styles.text,
               }}
             >
@@ -114,17 +117,20 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           </div>
           <div
             style={{
-              marginTop: '0.25rem',
-              fontSize: '1rem',
-              color: '#64748b',
-              fontWeight: 500,
+              marginTop: '0.35rem',
+              fontSize: '0.9rem',
+              color: '#475569',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
             }}
           >
-            <span style={{ textTransform: 'uppercase' }}>
+            <span style={{ textTransform: 'uppercase', opacity: 0.8 }}>
               {insight.category}
             </span>
-            <span style={{ margin: '0 0.5rem', opacity: 0.5 }}>•</span>
-            <span style={{ color: isHighRisk ? '#dc2626' : 'inherit', fontWeight: isHighRisk ? 700 : 500 }}>
+            <span style={{ opacity: 0.3 }}>•</span>
+            <span style={{ color: isHighRisk ? '#e11d48' : 'inherit' }}>
               {Math.round(insight.probability * 100)}% Probability
             </span>
           </div>
@@ -133,10 +139,11 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
 
       <div
         style={{
-          fontSize: '1.5rem',
-          lineHeight: 1.6,
+          fontSize: '1.35rem',
+          lineHeight: 1.5,
           fontWeight: 500,
           color: '#1e293b',
+          letterSpacing: '-0.01em',
         }}
       >
         <ReactMarkdown
