@@ -126,13 +126,21 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
               gap: '0.5rem',
             }}
           >
-            <span style={{ textTransform: 'uppercase', opacity: 0.8 }}>
-              {insight.category}
-            </span>
-            <span style={{ opacity: 0.3 }}>•</span>
-            <span style={{ color: isHighRisk ? '#e11d48' : 'inherit' }}>
-              {Math.round(insight.probability * 100)}% Probability
-            </span>
+            {insight.level !== SignalLevel.NEUTRAL ? (
+              <>
+                <span style={{ textTransform: 'uppercase', opacity: 0.8 }}>
+                  {insight.category}
+                </span>
+                <span style={{ opacity: 0.3 }}>•</span>
+                <span
+                  style={{ color: isHighRisk ? '#e11d48' : 'inherit' }}
+                >
+                  {Math.round(insight.probability * 100)}% Probability
+                </span>
+              </>
+            ) : (
+              <span style={{ opacity: 0.6 }}>No immediate action required</span>
+            )}
           </div>
         </div>
       </div>
