@@ -9,6 +9,13 @@ interface ActionableInsightCardProps {
 const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
   insight,
 }) => {
+  /* Set to true to see raw AI data in console */
+  const debug = false;
+
+  if (debug) {
+    console.log('[DEBUG] ActionableInsightCard Raw Data:', insight);
+  }
+
   const getStyles = (level: SignalLevel) => {
     switch (level) {
       case SignalLevel.CRITICAL:
@@ -52,8 +59,23 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
   };
 
   const styles = getStyles(insight.level);
+  const rawProbability = Number(insight.probability);
+  // Handle cases where AI might return 0-100 instead of 0-1
+  let normalizedProbability = isNaN(rawProbability) ? 0 : rawProbability;
+  if (normalizedProbability > 1) {
+    normalizedProbability = normalizedProbability / 100;
+  }
+  const probability = normalizedProbability;
+
+  if (debug && isNaN(Number(insight.probability))) {
+    console.warn(
+      '[DEBUG] Probability parsing failed. Raw value:',
+      insight.probability,
+    );
+  }
+
   const isHighRisk =
-    insight.level !== SignalLevel.NEUTRAL && insight.probability >= 0.8;
+    insight.level !== SignalLevel.NEUTRAL && probability >= 0.8;
 
   return (
     <div
@@ -133,9 +155,12 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
                 </span>
                 <span style={{ opacity: 0.3 }}>•</span>
                 <span
-                  style={{ color: isHighRisk ? '#e11d48' : 'inherit' }}
+                  style={{
+                    color: isHighRisk ? '#e11d48' : 'inherit',
+                    fontWeight: isHighRisk ? 700 : 600,
+                  }}
                 >
-                  {Math.round(insight.probability * 100)}% Probability
+                  {Math.round(probability * 100)}% Probability
                 </span>
               </>
             ) : (
