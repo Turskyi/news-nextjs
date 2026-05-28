@@ -9,12 +9,12 @@ interface Input {
   lang?: string;
 }
 
-interface Cache {
+interface CacheEntry {
   insight: ActionableInsight;
   timestamp: number;
 }
 
-let cache: Cache | null = null;
+const cache: Record<string, CacheEntry> = {};
 
 export default async function handler(
   request: NextApiRequest,
@@ -35,6 +35,7 @@ export default async function handler(
   }
 
   const input: Input = request.body;
+  const lang = input.lang || 'en';
 
   if (!input || !input.articles || input.articles.length === 0) {
     return response.status(400).json({ error: 'Missing articles' });
@@ -43,8 +44,8 @@ export default async function handler(
   const now = Date.now();
   const fourHours = 4 * 60 * 60 * 1000;
 
-  if (cache && now - cache.timestamp < fourHours) {
-    return response.status(200).json(cache.insight);
+  if (cache[lang] && now - cache[lang].timestamp < fourHours) {
+    return response.status(200).json(cache[lang].insight);
   }
 
   const newsString = input.articles.map((article: ConclusionArticle) => {
@@ -67,7 +68,7 @@ export default async function handler(
     const jsonString = rawResponse.replace(/```json\n?|\n?```/g, '').trim();
     const insight: ActionableInsight = JSON.parse(jsonString);
 
-    cache = {
+    cache[lang] = {
       insight,
       timestamp: now,
     };

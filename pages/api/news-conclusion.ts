@@ -9,12 +9,12 @@ interface Input {
   lang?: string;
 }
 
-interface Cache {
+interface CacheEntry {
   conclusion: string;
   timestamp: number;
 }
 
-let cache: Cache | null = null;
+const cache: Record<string, CacheEntry> = {};
 
 export default async function handler(
   request: NextApiRequest,
@@ -35,6 +35,7 @@ export default async function handler(
   }
 
   const input: Input = request.body;
+  const lang = input.lang || 'en';
 
   if (!input || !input.articles || input.articles.length === 0) {
     return response
@@ -45,8 +46,8 @@ export default async function handler(
   const now = Date.now();
   const fourHours = 4 * 60 * 60 * 1000;
 
-  if (cache && now - cache.timestamp < fourHours) {
-    return response.status(200).json({ conclusion: cache.conclusion });
+  if (cache[lang] && now - cache[lang].timestamp < fourHours) {
+    return response.status(200).json({ conclusion: cache[lang].conclusion });
   }
 
   const newsString = input.articles.map((article: ConclusionArticle) => {
@@ -69,7 +70,7 @@ export default async function handler(
     NEWS_CONCLUSION_USER_PROMPT(newsString),
   );
 
-  cache = {
+  cache[lang] = {
     conclusion,
     timestamp: now,
   };
