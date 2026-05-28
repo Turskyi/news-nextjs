@@ -7,6 +7,8 @@ export interface Translations {
   loadingInsight: string;
   readMore: string;
   actionableInsight: string;
+  conversationalSummary: string;
+  summary: string;
   probability: string;
   category: string;
   level: string;
@@ -38,6 +40,8 @@ export const translations: Record<Language, Translations> = {
     loadingInsight: 'Analyzing news for insights...',
     readMore: 'Read more',
     actionableInsight: 'Actionable Insight',
+    conversationalSummary: 'Conversational Summary',
+    summary: 'Summary',
     probability: 'Probability',
     category: 'Category',
     level: 'Signal Level',
@@ -74,6 +78,8 @@ export const translations: Record<Language, Translations> = {
     loadingInsight: 'Аналіз новин для отримання висновків...',
     readMore: 'Читати далі',
     actionableInsight: 'Практичні висновки',
+    conversationalSummary: 'Дружній огляд',
+    summary: 'Підсумок',
     probability: 'Ймовірність',
     category: 'Категорія',
     level: 'Рівень сигналу',

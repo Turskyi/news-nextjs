@@ -45,6 +45,8 @@ export const getServerSideProps: GetServerSideProps<
 
 export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
   const [insight, setInsight] = useState<ActionableInsight | null>(null);
+  const [summary, setSummary] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'insight' | 'summary'>('insight');
   const router = useRouter();
   const t = translations[lang];
 
@@ -76,16 +78,56 @@ export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
     return null;
   }, [newsArticles, lang]);
 
-  const { data, isLoading } = useSWR<ActionableInsight | null>(
+  const fetchSummary = useCallback(async () => {
+    const articles: ConclusionArticle[] = newsArticles
+      .slice(0, NEWS_MAX)
+      .map((article) => ({
+        title: article.title ?? '',
+        description: article.description ?? '',
+        articleText: article.content ?? '',
+      }));
+
+    const payload = JSON.stringify({ articles, lang });
+
+    try {
+      const response = await fetch('/api/news-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.summary as string;
+      }
+    } catch (error) {
+      console.error('Failed to fetch summary:', error);
+    }
+
+    return null;
+  }, [newsArticles, lang]);
+
+  const { data: insightData, isLoading: isInsightLoading } = useSWR<ActionableInsight | null>(
     newsArticles.length > 0 ? [`/api/actionable-insight`, lang] : null,
     fetchConclusion,
   );
 
+  const { data: summaryData, isLoading: isSummaryLoading } = useSWR<string | null>(
+    newsArticles.length > 0 ? [`/api/news-summary`, lang] : null,
+    fetchSummary,
+  );
+
   useEffect(() => {
-    if (data) {
-      setInsight(data);
+    if (insightData) {
+      setInsight(insightData);
     }
-  }, [data]);
+  }, [insightData]);
+
+  useEffect(() => {
+    if (summaryData) {
+      setSummary(summaryData);
+    }
+  }, [summaryData]);
 
   return (
     <>
@@ -118,30 +160,82 @@ export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
           >
             {t.title}
           </h1>
-          {insight && (
+          {(insight || summary) && (
             <p className="text-slate-500 transition-opacity duration-1000">
               {t.aiSubtitle}
             </p>
           )}
         </header>
 
-        {isLoading && !insight && (
-          <div className="mb-10 animate-pulse rounded-2xl bg-slate-100 p-8">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-slate-200"></div>
-              <div className="space-y-2">
-                <div className="h-3 w-32 rounded bg-slate-200"></div>
-                <div className="h-3 w-48 rounded bg-slate-200"></div>
+        <div className="mb-10 flex justify-center">
+          <div className="inline-flex rounded-xl bg-slate-100 p-1 shadow-inner">
+            <button
+              onClick={() => setViewMode('insight')}
+              className={`rounded-lg px-6 py-2 text-sm font-bold transition-all ${
+                viewMode === 'insight'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {t.actionableInsight}
+            </button>
+            <button
+              onClick={() => setViewMode('summary')}
+              className={`rounded-lg px-6 py-2 text-sm font-bold transition-all ${
+                viewMode === 'summary'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {t.conversationalSummary}
+            </button>
+          </div>
+        </div>
+
+        {((viewMode === 'insight' && isInsightLoading && !insight) ||
+          (viewMode === 'summary' && isSummaryLoading && !summary)) && (
+          <div className="mb-10 animate-pulse rounded-[3rem] bg-slate-100 p-12 md:p-20">
+            <div className="mb-8 flex items-center gap-6">
+              <div className="h-20 w-20 rounded-[1.5rem] bg-slate-200"></div>
+              <div className="space-y-3">
+                <div className="h-4 w-32 rounded bg-slate-200"></div>
+                <div className="h-4 w-48 rounded bg-slate-200"></div>
               </div>
             </div>
-            <div className="h-6 w-3/4 rounded bg-slate-200"></div>
+            <div className="space-y-3">
+              <div className="h-6 w-full rounded bg-slate-200"></div>
+              <div className="h-6 w-5/6 rounded bg-slate-200"></div>
+            </div>
             <p className="mt-4 text-sm text-slate-400">{t.loadingInsight}</p>
           </div>
         )}
 
-        {insight && (
-          <div style={{ marginBottom: '2rem' }}>
+        {viewMode === 'insight' && insight && (
+          <div style={{ marginBottom: '8rem' }}>
             <ActionableInsightCard insight={insight} lang={lang} />
+          </div>
+        )}
+
+        {viewMode === 'summary' && summary && (
+          <div
+            style={{
+              marginBottom: '8rem',
+              backgroundColor: '#f8fafc',
+              border: '2px solid #e2e8f0',
+              borderRadius: '3.5rem',
+              padding: '3rem 4rem',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '1.25rem',
+                lineHeight: 1.6,
+                color: '#334155',
+              }}
+            >
+              <ReactMarkdown>{summary}</ReactMarkdown>
+            </div>
           </div>
         )}
 
