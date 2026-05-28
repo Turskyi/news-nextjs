@@ -3,6 +3,8 @@ import { Card } from 'react-bootstrap';
 import Image from 'next/image';
 import placeholderImage from '@/assets/images/news_article_placeholder.jpeg';
 import styles from '@/styles/NewsArticleEntry.module.css';
+import { Language, translations } from '@/constants/translations';
+import { useRouter } from 'next/router';
 
 interface NewsArticleEntryProps {
   article: NewsArticle;
@@ -11,6 +13,10 @@ interface NewsArticleEntryProps {
 const NewsArticleEntry = ({
   article: { title, description, url, urlToImage },
 }: NewsArticleEntryProps) => {
+  const router = useRouter();
+  const lang = (router.query.lang as Language) || 'en';
+  const t = translations[lang];
+
   const validImageUrl =
     urlToImage?.startsWith('http://') || urlToImage?.startsWith('https://')
       ? urlToImage
@@ -30,10 +36,10 @@ const NewsArticleEntry = ({
         />
         <Card.Body className="p-5">
           <Card.Title className="mb-3 line-clamp-2 font-bold text-slate-800">
-            {title || 'No Title Available'}
+            {title || t.noTitle}
           </Card.Title>
           <Card.Text className="line-clamp-3 text-sm text-slate-600">
-            {description || 'No description available.'}
+            {description || t.noDescription}
           </Card.Text>
         </Card.Body>
       </Card>

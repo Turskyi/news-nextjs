@@ -3,8 +3,14 @@ import { NewsArticle } from '@/models/NewsArticles';
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
+import { Language, translations } from '@/constants/translations';
+import { useRouter } from 'next/router';
 
 const SearchNewsPage = () => {
+  const router = useRouter();
+  const lang = (router.query.lang as Language) || 'en';
+  const t = translations[lang];
+
   const [searchResults, setSearchResults] = useState<NewsArticle[] | null>(
     null,
   );
@@ -37,18 +43,18 @@ const SearchNewsPage = () => {
   return (
     <>
       <Head>
-        <title key="title">Search News</title>
+        <title key="title">{t.searchTitle}</title>
       </Head>
       <main>
-        <h1>Search News</h1>
+        <h1>{t.searchTitle}</h1>
         {/*     This is page uses client-side data fetching to show fresh data for every search.
                     Requests are handled by our backend via API routes. */}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="search-input">
-            <Form.Label>Search query</Form.Label>
+            <Form.Label>{t.searchQueryLabel}</Form.Label>
             <Form.Control
               name="searchQuery"
-              placeholder="e.g. politics, sports, ..."
+              placeholder={t.searchPlaceholder}
             />
           </Form.Group>
           <Button
@@ -56,16 +62,16 @@ const SearchNewsPage = () => {
             className="mb-3"
             disabled={searchResultsLoading}
           >
-            Search
+            {t.searchButtonText}
           </Button>
         </Form>
         <div className="d-flex flex-column align-items-center">
           {searchResultsLoading && <Spinner animation="border" />}
           {searchResultsLoadingIsError && (
-            <p>Something went wrong. Please try again.</p>
+            <p>{t.searchError}</p>
           )}
           {searchResults?.length === 0 && (
-            <p>Nothing found. Try a different query.</p>
+            <p>{t.searchNoResults}</p>
           )}
           {searchResults && <NewsArticleGrid articles={searchResults} />}
         </div>

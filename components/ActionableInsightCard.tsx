@@ -1,16 +1,20 @@
 import React from 'react';
 import { ActionableInsight, SignalLevel } from '@/models/ActionableInsight';
 import ReactMarkdown from 'react-markdown';
+import { Language, translations } from '@/constants/translations';
 
 interface ActionableInsightCardProps {
   insight: ActionableInsight;
+  lang: Language;
 }
 
 const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
   insight,
+  lang,
 }) => {
   /* Set to true to see raw AI data in console */
   const debug = false;
+  const t = translations[lang];
 
   if (debug) {
     console.log('[DEBUG] ActionableInsightCard Raw Data:', insight);
@@ -25,7 +29,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           text: '#b91c1c',
           light: '#ef4444',
           icon: '🚨',
-          label: 'Critical Action',
+          label: lang === 'uk' ? 'Критична дія' : 'Critical Action',
         };
       case SignalLevel.WARNING:
         return {
@@ -34,7 +38,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           text: '#b45309',
           light: '#f59e0b',
           icon: '⚠️',
-          label: 'Warning',
+          label: lang === 'uk' ? 'Попередження' : 'Warning',
         };
       case SignalLevel.ADVISORY:
         return {
@@ -43,7 +47,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           text: '#1d4ed8',
           light: '#3b82f6',
           icon: 'ℹ️',
-          label: 'Advisory',
+          label: lang === 'uk' ? 'Рекомендація' : 'Advisory',
         };
       case SignalLevel.NEUTRAL:
       default:
@@ -53,7 +57,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           text: '#047857',
           light: '#10b981',
           icon: '✅',
-          label: 'All Clear',
+          label: lang === 'uk' ? 'Все чисто' : 'All Clear',
         };
     }
   };
@@ -151,7 +155,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
             {insight.level !== SignalLevel.NEUTRAL ? (
               <>
                 <span style={{ textTransform: 'uppercase', opacity: 0.8 }}>
-                  {insight.category}
+                  {t.categories[insight.category] || insight.category}
                 </span>
                 <span style={{ opacity: 0.3 }}>•</span>
                 <span
@@ -160,11 +164,13 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
                     fontWeight: isHighRisk ? 700 : 600,
                   }}
                 >
-                  {Math.round(probability * 100)}% Probability
+                  {Math.round(probability * 100)}% {t.probability}
                 </span>
               </>
             ) : (
-              <span style={{ opacity: 0.6 }}>No immediate action required</span>
+              <span style={{ opacity: 0.6 }}>
+                {lang === 'uk' ? 'Негайних дій не потрібно' : 'No immediate action required'}
+              </span>
             )}
           </div>
         </div>

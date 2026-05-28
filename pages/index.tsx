@@ -8,9 +8,12 @@ import { ActionableInsight } from '@/models/ActionableInsight';
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import { BASE_URL, DEFAULT_COUNTRY_CODE, NEWS_MAX } from '../constants';
+import { Language, translations } from '@/constants/translations';
+import { useRouter } from 'next/router';
 
 interface NewsPageProps {
   newsArticles: NewsArticle[];
+  lang: Language;
 }
 
 export const getServerSideProps: GetServerSideProps<
@@ -20,25 +23,30 @@ export const getServerSideProps: GetServerSideProps<
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}/`;
 
+  const lang = (context.query.lang as Language) || 'en';
+  const countryCode = lang === 'uk' ? 'ua' : DEFAULT_COUNTRY_CODE;
+
   const response = await fetch(
-    baseUrl + 'api/news?country=' + DEFAULT_COUNTRY_CODE,
+    baseUrl + 'api/news?country=' + countryCode,
   );
 
   if (!response.ok) {
     console.error('Failed to fetch news:', response.statusText);
     return {
-      props: { newsArticles: [] },
+      props: { newsArticles: [], lang },
     };
   }
 
   const newsResponse: NewsArticle[] = await response.json();
   return {
-    props: { newsArticles: newsResponse },
+    props: { newsArticles: newsResponse, lang },
   };
 };
 
-export default function NewsPage({ newsArticles }: NewsPageProps) {
+export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
   const [insight, setInsight] = useState<ActionableInsight | null>(null);
+  const router = useRouter();
+  const t = translations[lang];
 
   const fetchConclusion = useCallback(async () => {
     const articles: ConclusionArticle[] = newsArticles
@@ -49,10 +57,9 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
         articleText: article.content ?? '',
       }));
 
-    const payload = JSON.stringify({ articles });
+    const payload = JSON.stringify({ articles, lang });
 
     try {
-      // Try the new structured insight endpoint first
       const response = await fetch('/api/actionable-insight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -62,32 +69,15 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
       if (response.ok) {
         return (await response.json()) as ActionableInsight;
       }
-
-      // If new endpoint fails, fallback to legacy news-conclusion
-      const fallbackResponse = await fetch('/api/news-conclusion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-      });
-
-      if (fallbackResponse.ok) {
-        const legacyData = await fallbackResponse.json();
-        return {
-          conclusion: legacyData.conclusion,
-          level: 'NEUTRAL' as any, // Fallback to basic level
-          probability: 0,
-          category: 'GENERAL' as any,
-        } as ActionableInsight;
-      }
     } catch (error) {
-      console.error('Failed to fetch insight, even with fallback:', error);
+      console.error('Failed to fetch insight:', error);
     }
 
     return null;
-  }, [newsArticles]);
+  }, [newsArticles, lang]);
 
   const { data, isLoading } = useSWR<ActionableInsight | null>(
-    newsArticles.length > 0 ? '/api/actionable-insight' : null,
+    newsArticles.length > 0 ? [`/api/actionable-insight`, lang] : null,
     fetchConclusion,
   );
 
@@ -100,30 +90,21 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
   return (
     <>
       <Head>
-        <title key="title">News Glance</title>
-        <meta
-          name="description"
-          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
-        />
+        <title key="title">{t.title}</title>
+        <meta name="description" content={t.description} />
         <meta
           name="keywords"
           content="Next.js, News, AI, Conclusion, Headlines, News Glance"
         />
-        <meta property="og:title" content="News Glance" />
-        <meta
-          property="og:description"
-          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
-        />
+        <meta property="og:title" content={t.title} />
+        <meta property="og:description" content={t.description} />
         <meta
           property="og:image"
           content={`${BASE_URL}_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75`}
         />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="News Glance" />
-        <meta
-          name="twitter:description"
-          content="A website that displays top ten news articles and uses modern AI to generate a conclusion based on the first five titles."
-        />
+        <meta name="twitter:title" content={t.title} />
+        <meta name="twitter:description" content={t.description} />
         <meta
           name="twitter:image"
           content={`${BASE_URL}_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75`}
@@ -135,12 +116,11 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
             className="mb-2 text-6xl font-bold tracking-tight"
             style={{ fontFamily: 'Bree Serif' }}
           >
-            News Glance
+            {t.title}
           </h1>
           {insight && (
             <p className="text-slate-500 transition-opacity duration-1000">
-              AI-powered actionable insights from today&apos;s comprehensive
-              news analysis
+              {t.aiSubtitle}
             </p>
           )}
         </header>
@@ -155,12 +135,13 @@ export default function NewsPage({ newsArticles }: NewsPageProps) {
               </div>
             </div>
             <div className="h-6 w-3/4 rounded bg-slate-200"></div>
+            <p className="mt-4 text-sm text-slate-400">{t.loadingInsight}</p>
           </div>
         )}
 
         {insight && (
           <div style={{ marginBottom: '2rem' }}>
-            <ActionableInsightCard insight={insight} />
+            <ActionableInsightCard insight={insight} lang={lang} />
           </div>
         )}
 

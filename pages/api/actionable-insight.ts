@@ -6,6 +6,7 @@ import { ActionableInsight, SignalLevel, InsightCategory } from '../../models/Ac
 
 interface Input {
   articles: ConclusionArticle[];
+  lang?: string;
 }
 
 interface Cache {
@@ -53,8 +54,12 @@ export default async function handler(
     return content;
   }).join('\n\n');
 
+  const langInstruction = input.lang === 'uk'
+    ? 'IMPORTANT: The "conclusion" field MUST be in Ukrainian. The "level" and "category" fields MUST remain in English as defined in the rules.'
+    : 'IMPORTANT: The "conclusion" field MUST be in English.';
+
   const rawResponse = await getConclusionWithFallback(
-    ACTIONABLE_INSIGHT_SYSTEM_PROMPT,
+    ACTIONABLE_INSIGHT_SYSTEM_PROMPT + '\n' + langInstruction,
     ACTIONABLE_INSIGHT_USER_PROMPT(newsString),
   );
 
