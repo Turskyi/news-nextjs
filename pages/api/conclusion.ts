@@ -5,6 +5,7 @@ import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 
 interface Input {
   articles: ConclusionArticle[];
+  lang?: string;
 }
 
 /**
@@ -56,8 +57,12 @@ export default async function handler(
     })
     .join('\n\n');
 
+  const langInstruction = input.lang === 'uk'
+    ? 'IMPORTANT: The response MUST be in Ukrainian.'
+    : 'IMPORTANT: The response MUST be in English.';
+
   const conclusion = await getConclusionWithFallback(
-    NEWS_CONCLUSION_SYSTEM_PROMPT,
+    NEWS_CONCLUSION_SYSTEM_PROMPT + '\n' + langInstruction,
     NEWS_CONCLUSION_USER_PROMPT(newsString),
   );
 
