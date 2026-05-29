@@ -29,9 +29,14 @@ export default async function handler(
   let articles: NewsArticle[] = [];
 
   try {
-    if (countryCode.toLowerCase() === 'ua' || countryCode.toLowerCase() === 'uk') {
-      // Use GNews for Ukrainian news as NewsAPI has limited coverage
-      const gNewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=uk&country=ua&apikey=${process.env.GNEWS_API_KEY}`;
+    if (
+      countryCode.toLowerCase() === 'ua' ||
+      countryCode.toLowerCase() === 'uk'
+    ) {
+      // Use GNews for Ukrainian news as NewsAPI has limited coverage.
+      // The `max=12` is ignored as per https://gnews.io/pricing and returns
+      // only 10.
+      const gNewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=uk&country=ua&max=12&apikey=${process.env.GNEWS_API_KEY}`;
       const result = await fetch(gNewsUrl);
 
       if (result.ok) {
@@ -55,7 +60,8 @@ export default async function handler(
         countryCode.toLowerCase() === 'intl' ||
         countryCode.toLowerCase() === 'international'
       ) {
-        const sources = 'bbc-news,cnn,reuters,al-jazeera-english,the-wall-street-journal';
+        const sources =
+          'bbc-news,cnn,reuters,al-jazeera-english,the-wall-street-journal';
         url = `https://newsapi.org/v2/top-headlines?sources=${sources}&apiKey=${process.env.NEWS_API_KEY}`;
       } else {
         url = `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=${process.env.NEWS_API_KEY}`;
