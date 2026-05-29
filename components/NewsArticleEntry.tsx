@@ -23,7 +23,11 @@ const NewsArticleEntry = ({
       : undefined;
 
   return (
-    <a href={url || '#'} className="no-underline">
+    <a
+      href={url || '#'}
+      className="no-underline hover:no-underline"
+      style={{ textDecoration: 'none' }}
+    >
       <Card className="h-100 overflow-hidden border-0 shadow-sm transition-transform duration-300 hover:scale-[1.02] rounded-[1.5rem]">
         <Image
           unoptimized
