@@ -79,5 +79,56 @@ export default async function handler(
     console.error('Fetch error:', error);
   }
 
-  return response.status(200).json(articles);
+  return response.status(200).json(articles.filter(isArticleUseful));
+}
+
+function isArticleUseful(article: NewsArticle): boolean {
+  const title: string = article.title ?? '';
+  const description: string = article.description ?? '';
+  const url: string = article.url ?? '';
+
+  if (title.toLowerCase() === '[removed]') {
+    return false;
+  } else {
+    const uselessPhrases: string[] = [
+      'log in to your',
+      'sign in to your',
+      'subscribe to',
+      'create an account',
+      'for a more personal',
+      'cookie policy',
+      'privacy policy',
+      'terms of service',
+    ];
+
+    const lowercaseTitle: string = title.toLowerCase();
+    const lowercaseDescription: string = description.toLowerCase();
+
+    const isUseless: boolean = uselessPhrases.some(
+      (phrase: string) =>
+        lowercaseTitle.includes(phrase) ||
+        lowercaseDescription.includes(phrase),
+    );
+
+    if (isUseless) {
+      return false;
+    } else {
+      const uselessUrlKeywords: string[] = [
+        '/login',
+        '/signup',
+        '/subscribe',
+        'all-access',
+      ];
+      const lowercaseUrl: string = url.toLowerCase();
+      if (
+        uselessUrlKeywords.some((keyword: string) =>
+          lowercaseUrl.includes(keyword),
+        )
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
 }
