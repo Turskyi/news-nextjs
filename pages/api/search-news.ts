@@ -6,6 +6,17 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  response.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+
+  if (request.method === 'OPTIONS') {
+    return response.status(200).end();
+  }
+
   const searchQuery = request.query.q?.toString();
   if (!searchQuery) {
     return response.status(400).json({ errorMessage: 'Please provide a search query' });
