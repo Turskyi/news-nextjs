@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { NewsResponse } from '@/models/NewsArticles';
+import { NewsArticle, NewsResponse } from '@/models/NewsArticles';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { NewsArticleDeduplicator } from '@/services/NewsArticleDeduplicator';
 
 export default async function handler(
   request: NextApiRequest,
@@ -17,21 +18,40 @@ export default async function handler(
     return response.status(200).end();
   }
 
-  const searchQuery = request.query.q?.toString();
+  const searchQuery: string | undefined = request.query.q?.toString();
+  const isDebugModeEnabled: boolean = request.query.debug === 'true';
+
+  if (isDebugModeEnabled) {
+    console.log('[Search-News] Incoming search query:', searchQuery);
+  }
+
   if (!searchQuery) {
     return response.status(400).json({ errorMessage: 'Please provide a search query' });
   } else {
-    const result = await fetch(
-      `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${process.env.NEWS_API_KEY}`,
-    );
+    const apiUrl: string = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${process.env.NEWS_API_KEY}`;
+
+    if (isDebugModeEnabled) {
+      console.log('[Search-News] Requesting NewsAPI URL:', apiUrl);
+    }
+
+    const result: Response = await fetch(apiUrl);
 
     if (!result.ok) {
-      const errorData = await result.json();
-      console.error('Search API error:', errorData);
+      const errorData: unknown = await result.json();
+      console.error('[Search-News] API error:', errorData);
       return response.status(result.status).json(errorData);
     }
 
     const newsResponse: NewsResponse = await result.json();
-    return response.status(200).json(newsResponse.articles || []);
+    const articles: NewsArticle[] = newsResponse.articles || [];
+    const uniqueArticles: NewsArticle[] = NewsArticleDeduplicator.deduplicate(articles);
+
+    if (isDebugModeEnabled) {
+      console.log('[Search-News] Response status:', result.status);
+      console.log('[Search-News] Articles found:', articles.length);
+      console.log('[Search-News] Unique articles:', uniqueArticles.length);
+    }
+
+    return response.status(200).json(uniqueArticles);
   }
 }
