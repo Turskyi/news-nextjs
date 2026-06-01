@@ -71,9 +71,16 @@ export default async function handler(
       const result = await fetch(url);
       if (result.ok) {
         const newsResponse: NewsResponse = await result.json();
-        articles = (newsResponse.articles || []).map(cleanNewsArticle);
+        articles = (
+          Array.isArray(newsResponse.articles) ? newsResponse.articles : []
+        ).map(cleanNewsArticle);
       } else {
-        console.error('News API error:', await result.text());
+        const errorData = await result.json().catch(() => null);
+        console.error('News API error:', errorData);
+
+        if (isRateLimitError(errorData, result.status)) {
+          articles = await fetchGNewsTopHeadlinesFallback(countryCode);
+        }
       }
     }
   } catch (error) {
@@ -81,6 +88,75 @@ export default async function handler(
   }
 
   return response.status(200).json(articles.filter(isArticleUseful));
+}
+
+async function fetchGNewsTopHeadlinesFallback(
+  countryCode: string,
+): Promise<NewsArticle[]> {
+  const gnewsApiKey = process.env.GNEWS_API_KEY;
+  if (!gnewsApiKey) {
+    console.error('[news] Missing GNEWS_API_KEY for fallback');
+    return [];
+  }
+
+  const normalizedCountry = countryCode.toLowerCase();
+  const isInternational =
+    normalizedCountry === 'intl' || normalizedCountry === 'international';
+
+  let gNewsUrl =
+    'https://gnews.io/api/v4/top-headlines?lang=en&max=12&apikey=' +
+    encodeURIComponent(gnewsApiKey);
+
+  if (!isInternational) {
+    gNewsUrl =
+      'https://gnews.io/api/v4/top-headlines?lang=en&max=12&country=' +
+      encodeURIComponent(normalizedCountry) +
+      '&apikey=' +
+      encodeURIComponent(gnewsApiKey);
+  }
+
+  const result = await fetch(gNewsUrl);
+  if (!result.ok) {
+    console.error(
+      '[news] GNews fallback error:',
+      await result
+        .text()
+        .catch(() => 'Failed to parse GNews fallback response'),
+    );
+    return [];
+  }
+
+  const data = await result.json();
+  const gNewsArticles = Array.isArray(data.articles) ? data.articles : [];
+
+  return gNewsArticles
+    .map((article: any) => ({
+      author: article.source?.name ?? null,
+      title: article.title ?? null,
+      description: article.description ?? null,
+      content: article.content ?? null,
+      url: article.url,
+      urlToImage: article.image ?? null,
+      publishedAt: article.publishedAt ?? null,
+    }))
+    .map(cleanNewsArticle);
+}
+
+function isRateLimitError(errorData: unknown, status: number): boolean {
+  if (status === 429) {
+    return true;
+  }
+
+  if (!errorData || typeof errorData !== 'object') {
+    return false;
+  }
+
+  const data = errorData as Record<string, unknown>;
+  return (
+    data.code === 'rateLimited' ||
+    (typeof data.message === 'string' &&
+      data.message.toLowerCase().includes('rate limit'))
+  );
 }
 
 function isArticleUseful(article: NewsArticle): boolean {
