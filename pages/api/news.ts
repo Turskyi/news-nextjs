@@ -1,5 +1,6 @@
 import { DEFAULT_COUNTRY_CODE } from '@/constants';
 import { NewsArticle, NewsResponse } from '@/models/NewsArticles';
+import { cleanNewsArticle } from '@/services/newsContentCleaner';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -39,14 +40,17 @@ export default async function handler(
       if (result.ok) {
         const data = await result.json();
         const gNewsArticles = data.articles || [];
-        articles = gNewsArticles.map((article: any) => ({
-          title: article.title,
-          description: article.description,
-          content: article.content,
-          url: article.url,
-          urlToImage: article.image, // Map 'image' to 'urlToImage'
-          publishedAt: article.publishedAt,
-        }));
+
+        articles = gNewsArticles
+          .map((article: any) => ({
+            title: article.title,
+            description: article.description,
+            content: article.content,
+            url: article.url,
+            urlToImage: article.image, // Map 'image' to 'urlToImage'
+            publishedAt: article.publishedAt,
+          }))
+          .map(cleanNewsArticle);
       } else {
         console.error('GNews API error:', await result.text());
       }
@@ -67,7 +71,7 @@ export default async function handler(
       const result = await fetch(url);
       if (result.ok) {
         const newsResponse: NewsResponse = await result.json();
-        articles = newsResponse.articles || [];
+        articles = (newsResponse.articles || []).map(cleanNewsArticle);
       } else {
         console.error('News API error:', await result.text());
       }

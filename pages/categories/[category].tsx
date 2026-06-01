@@ -1,4 +1,5 @@
 import NewsArticleGrid from '@/components/NewsArticleGrid';
+import { cleanNewsArticle } from '@/services/newsContentCleaner';
 import { NewsArticle, NewsResponse } from '@/models/NewsArticles';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
@@ -45,8 +46,10 @@ export const getStaticProps: GetStaticProps<CategoryNewsPageProps> = async ({
     };
   }
 
+  const cleanedArticles = (newsResponse.articles || []).map(cleanNewsArticle);
+
   return {
-    props: { newsArticles: newsResponse.articles || [] },
+    props: { newsArticles: cleanedArticles },
     revalidate: 5 * 60,
   };
   // let error go to 500 page
