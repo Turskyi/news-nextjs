@@ -28,8 +28,25 @@ const SearchNewsPage = () => {
         setSearchResults(null);
         setSearchResultsLoadingIsError(false);
         setSearchResultsLoading(true);
-        const response = await fetch('/api/search-news?q=' + searchQuery);
-        const articles: NewsArticle[] = await response.json();
+
+        const response = await fetch(
+          '/api/search-news?q=' + encodeURIComponent(searchQuery),
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          console.error('[Search-News] API response error:', errorData);
+          setSearchResultsLoadingIsError(true);
+          return;
+        }
+
+        const articles = await response.json();
+        if (!Array.isArray(articles)) {
+          console.error('[Search-News] Invalid payload received:', articles);
+          setSearchResultsLoadingIsError(true);
+          return;
+        }
+
         setSearchResults(articles);
       } catch (error) {
         console.error(error);
@@ -67,12 +84,8 @@ const SearchNewsPage = () => {
         </Form>
         <div className="d-flex flex-column align-items-center">
           {searchResultsLoading && <Spinner animation="border" />}
-          {searchResultsLoadingIsError && (
-            <p>{t.searchError}</p>
-          )}
-          {searchResults?.length === 0 && (
-            <p>{t.searchNoResults}</p>
-          )}
+          {searchResultsLoadingIsError && <p>{t.searchError}</p>}
+          {searchResults?.length === 0 && <p>{t.searchNoResults}</p>}
           {searchResults && <NewsArticleGrid articles={searchResults} />}
         </div>
       </main>

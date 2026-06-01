@@ -7,6 +7,10 @@ interface NewsArticleGridProps {
 }
 
 const NewsArticleGrid = ({ articles }: NewsArticleGridProps) => {
+  if (!Array.isArray(articles)) {
+    return null;
+  }
+
   return (
     <Row xs={1} sm={2} xl={3} className={'g-4'}>
       {articles.map((article) => (

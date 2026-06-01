@@ -38,17 +38,36 @@ export default async function handler(
     }
 
     const result: Response = await fetch(apiUrl);
+    let articles: NewsArticle[] = [];
 
     if (!result.ok) {
-      const errorData: unknown = await result.json();
+      const errorData: unknown = await result.json().catch(() => null);
       console.error('[Search-News] API error:', errorData);
-      return response.status(result.status).json(errorData);
+
+      if (isRateLimitError(errorData, result.status)) {
+        articles = await fetchGNewsSearchResults(
+          searchQuery,
+          isDebugModeEnabled,
+        );
+        if (articles.length === 0) {
+          return response.status(502).json({
+            status: 'error',
+            message:
+              'NewsAPI rate limited and GNews fallback did not return results.',
+          });
+        }
+      } else {
+        return response
+          .status(result.status)
+          .json(errorData || { message: 'Unexpected NewsAPI error' });
+      }
+    } else {
+      const newsResponse: NewsResponse = await result.json();
+      articles = (
+        Array.isArray(newsResponse.articles) ? newsResponse.articles : []
+      ).map(cleanNewsArticle);
     }
 
-    const newsResponse: NewsResponse = await result.json();
-    const articles: NewsArticle[] = (newsResponse.articles || []).map(
-      cleanNewsArticle,
-    );
     const uniqueArticles: NewsArticle[] =
       NewsArticleDeduplicator.deduplicate(articles);
 
@@ -59,5 +78,68 @@ export default async function handler(
     }
 
     return response.status(200).json(uniqueArticles);
+
+    async function fetchGNewsSearchResults(
+      searchQuery: string,
+      isDebugModeEnabled: boolean,
+    ): Promise<NewsArticle[]> {
+      const gnewsApiKey = process.env.GNEWS_API_KEY;
+      if (!gnewsApiKey) {
+        console.error(
+          '[Search-News] Missing GNEWS_API_KEY for fallback search',
+        );
+        return [];
+      }
+
+      const encodedQuery = encodeURIComponent(searchQuery);
+      const gNewsUrl = `https://gnews.io/api/v4/search?q=${encodedQuery}&lang=en&max=12&apikey=${gnewsApiKey}`;
+
+      if (isDebugModeEnabled) {
+        console.log('[Search-News] Falling back to GNews URL:', gNewsUrl);
+      }
+
+      const result = await fetch(gNewsUrl);
+      if (!result.ok) {
+        console.error(
+          '[Search-News] GNews fallback error:',
+          await result
+            .text()
+            .catch(() => 'Failed to parse GNews fallback response'),
+        );
+        return [];
+      }
+
+      const data = await result.json();
+      const gNewsArticles = Array.isArray(data.articles) ? data.articles : [];
+
+      return gNewsArticles
+        .map((article: any) => ({
+          author: article.source?.name ?? null,
+          title: article.title ?? null,
+          description: article.description ?? null,
+          url: article.url,
+          urlToImage: article.image ?? null,
+          publishedAt: article.publishedAt ?? null,
+          content: article.content ?? null,
+        }))
+        .map(cleanNewsArticle);
+    }
+
+    function isRateLimitError(errorData: unknown, status: number): boolean {
+      if (status === 429) {
+        return true;
+      }
+
+      if (!errorData || typeof errorData !== 'object') {
+        return false;
+      }
+
+      const data = errorData as Record<string, unknown>;
+      return (
+        data.code === 'rateLimited' ||
+        (typeof data.message === 'string' &&
+          data.message.toLowerCase().includes('rate limit'))
+      );
+    }
   }
 }
