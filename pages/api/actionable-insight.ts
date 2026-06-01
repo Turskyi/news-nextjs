@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { createHash } from 'crypto';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
 import { ACTIONABLE_INSIGHT_SYSTEM_PROMPT, ACTIONABLE_INSIGHT_USER_PROMPT } from '../../constants/prompts';
 import { getConclusionWithFallback } from '../../services/ai-orchestrator';
@@ -7,6 +8,7 @@ import { ActionableInsight, SignalLevel, InsightCategory } from '../../models/Ac
 interface Input {
   articles: ConclusionArticle[];
   lang?: string;
+  query?: string;
 }
 
 interface CacheEntry {
@@ -15,6 +17,16 @@ interface CacheEntry {
 }
 
 const cache: Record<string, CacheEntry> = {};
+
+function getArticlesHash(articles: ConclusionArticle[]): string {
+  const articleStrings = articles.map(a => `${a.title}|${a.description}|${a.articleText}`).join('||');
+  return createHash('sha256').update(articleStrings).digest('hex');
+}
+
+function getCacheKey(lang: string, articlesHash: string, query?: string): string {
+  const queryPart = query ? `:${query}` : '';
+  return `${lang}:${articlesHash}${queryPart}`;
+}
 
 export default async function handler(
   request: NextApiRequest,
@@ -40,9 +52,11 @@ export default async function handler(
 
   const now = Date.now();
   const fourHours = 4 * 60 * 60 * 1000;
+  const articlesHash = getArticlesHash(input.articles);
+  const cacheKey = getCacheKey(lang, articlesHash, input.query);
 
-  if (cache[lang] && now - cache[lang].timestamp < fourHours) {
-    return response.status(200).json(cache[lang].insight);
+  if (cache[cacheKey] && now - cache[cacheKey].timestamp < fourHours) {
+    return response.status(200).json(cache[cacheKey].insight);
   }
 
   const newsString = input.articles.map((article: ConclusionArticle) => {
@@ -65,7 +79,7 @@ export default async function handler(
     const jsonString = rawResponse.replace(/```json\n?|\n?```/g, '').trim();
     const insight: ActionableInsight = JSON.parse(jsonString);
 
-    cache[lang] = {
+    cache[cacheKey] = {
       insight,
       timestamp: now,
     };
