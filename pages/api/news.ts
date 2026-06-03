@@ -62,7 +62,7 @@ export default async function handler(
         countryCode.toLowerCase() === 'international'
       ) {
         const sources =
-          'bbc-news,cnn,reuters,al-jazeera-english,the-wall-street-journal';
+          'bbc-news,cnn,reuters,al-jazeera-english,the-wall-street-journal,kyivpost';
         url = `https://newsapi.org/v2/top-headlines?sources=${sources}&apiKey=${process.env.NEWS_API_KEY}`;
       } else {
         url = `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=${process.env.NEWS_API_KEY}`;
