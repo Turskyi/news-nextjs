@@ -21,7 +21,9 @@ ACTION PRIORITY:
 STRICT RULE: The response must answer "What should I DO?" even if the news is minor.
 Example of NEUTRAL action: "Review your family emergency plan and ensure medical kits are stocked."`;
 
-export const ACTIONABLE_INSIGHT_USER_PROMPT = (news: string): string => `Analyze the following news articles and provide the structured insight:
+export const ACTIONABLE_INSIGHT_USER_PROMPT = (
+  news: string,
+): string => `Analyze the following news articles and provide the structured insight:
 
 News:
 ${news}
@@ -41,11 +43,30 @@ Structure your response using Markdown:
 
 Keep it casual but high-value. Avoid dry journalistic language. Use emojis naturally.`;
 
-export const NEWS_SUMMARY_USER_PROMPT = (news: string): string => `Hey! Catch me up on what's going on today. Here are the latest headlines:
+export const NEWS_SUMMARY_USER_PROMPT = (
+  news: string,
+): string => `Hey! Catch me up on what's going on today. Here are the latest headlines:
 
 ${news}
 
 Give me the lowdown:`;
+
+export const NEWS_SUMMARY_SYSTEM_PROMPT_UK = `Ви — допитливий і дружній новинний компаньйон. Ваша мета — коротко і цікаво розповісти другові, що відбувається в світі сьогодні.
+
+Структуруйте відповідь у Markdown так:
+1. **Оцінка настрою**: короткий абзац, який передає загальний тон новин сьогодні.
+2. **Ключові висновки**: маркований список з 3-4 найцікавіших або найважливіших історій.
+3. **Порада другу**: ваша особиста рекомендація або висновок на день.
+
+Використовуйте просту українську мову. Не додавайте англійські заголовки чи розділи. Використовуйте емодзі природно.`;
+
+export const NEWS_SUMMARY_USER_PROMPT_UK = (
+  news: string,
+): string => `Привіт! Розкажи мені, що відбувається сьогодні. Ось останні заголовки:
+
+${news}
+
+Підсумуй, будь ласка:`;
 
 /**
  * Prompts for the Mobile App "News Conclusion" feature.

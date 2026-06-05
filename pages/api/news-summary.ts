@@ -1,7 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createHash } from 'crypto';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
-import { NEWS_SUMMARY_SYSTEM_PROMPT, NEWS_SUMMARY_USER_PROMPT } from '../../constants/prompts';
+import {
+  NEWS_SUMMARY_SYSTEM_PROMPT,
+  NEWS_SUMMARY_SYSTEM_PROMPT_UK,
+  NEWS_SUMMARY_USER_PROMPT,
+  NEWS_SUMMARY_USER_PROMPT_UK,
+} from '../../constants/prompts';
 import { getConclusionWithFallback } from '../../services/ai-orchestrator';
 
 interface Input {
@@ -18,11 +23,17 @@ interface CacheEntry {
 const cache: Record<string, CacheEntry> = {};
 
 function getArticlesHash(articles: ConclusionArticle[]): string {
-  const articleStrings = articles.map(a => `${a.title}|${a.description}|${a.articleText}`).join('||');
+  const articleStrings = articles
+    .map((a) => `${a.title}|${a.description}|${a.articleText}`)
+    .join('||');
   return createHash('sha256').update(articleStrings).digest('hex');
 }
 
-function getCacheKey(lang: string, articlesHash: string, query?: string): string {
+function getCacheKey(
+  lang: string,
+  articlesHash: string,
+  query?: string,
+): string {
   const queryPart = query ? `:${query}` : '';
   return `${lang}:${articlesHash}${queryPart}`;
 }
@@ -63,20 +74,23 @@ export default async function handler(
   const newsString = input.articles
     .map((article: ConclusionArticle) => {
       let articlePrompt = `Title: ${article.title}`;
-      if (article.description) articlePrompt += `\nDescription: ${article.description}`;
-      if (article.articleText) articlePrompt += `\nText: ${article.articleText}`;
+      if (article.description)
+        articlePrompt += `\nDescription: ${article.description}`;
+      if (article.articleText)
+        articlePrompt += `\nText: ${article.articleText}`;
       return articlePrompt;
     })
     .join('\n\n');
 
-  const systemPrompt = lang === 'uk'
-    ? `${NEWS_SUMMARY_SYSTEM_PROMPT}\n\nIMPORTANT: Respond ONLY in Ukrainian language.`
-    : NEWS_SUMMARY_SYSTEM_PROMPT;
+  const systemPrompt =
+    lang === 'uk' ? NEWS_SUMMARY_SYSTEM_PROMPT_UK : NEWS_SUMMARY_SYSTEM_PROMPT;
 
-  const summary = await getConclusionWithFallback(
-    systemPrompt,
-    NEWS_SUMMARY_USER_PROMPT(newsString),
-  );
+  const userPrompt =
+    lang === 'uk'
+      ? NEWS_SUMMARY_USER_PROMPT_UK(newsString)
+      : NEWS_SUMMARY_USER_PROMPT(newsString);
+
+  let summary = await getConclusionWithFallback(systemPrompt, userPrompt);
 
   cache[cacheKey] = {
     summary,
