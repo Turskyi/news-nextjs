@@ -16,9 +16,9 @@ interface NewsPageProps {
   lang: Language;
 }
 
-export const getServerSideProps: GetServerSideProps<
-  NewsPageProps
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps<NewsPageProps> = async (
+  context,
+) => {
   const host = context.req.headers.host;
   const protocol = host?.includes('localhost') ? 'http' : 'https';
   const baseUrl = `${protocol}://${host}/`;
@@ -26,9 +26,7 @@ export const getServerSideProps: GetServerSideProps<
   const lang = (context.query.lang as Language) || 'en';
   const countryCode = lang === 'uk' ? 'ua' : DEFAULT_COUNTRY_CODE;
 
-  const response = await fetch(
-    baseUrl + 'api/news?country=' + countryCode,
-  );
+  const response = await fetch(baseUrl + 'api/news?country=' + countryCode);
 
   if (!response.ok) {
     console.error('Failed to fetch news:', response.statusText);
@@ -76,10 +74,11 @@ export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
     return null;
   }, [newsArticles, lang]);
 
-  const { data: insightData, isLoading: isInsightLoading } = useSWR<ActionableInsight | null>(
-    newsArticles.length > 0 ? [`/api/actionable-insight`, lang] : null,
-    fetchConclusion,
-  );
+  const { data: insightData, isLoading: isInsightLoading } =
+    useSWR<ActionableInsight | null>(
+      newsArticles.length > 0 ? [`/api/actionable-insight`, lang] : null,
+      fetchConclusion,
+    );
 
   useEffect(() => {
     if (insightData) {
@@ -110,7 +109,7 @@ export default function NewsPage({ newsArticles, lang }: NewsPageProps) {
           content={`${BASE_URL}_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnews_article_placeholder.0b951b56.jpeg&w=1080&q=75`}
         />
       </Head>
-      <main className="container mx-auto max-w-5xl px-4 py-10">
+      <main className="mx-auto max-w-[min(100%,1200px)] px-4 py-10 sm:px-6 md:px-8">
         <header className="mb-12 text-center">
           <h1
             className="mb-2 text-6xl font-bold tracking-tight"
