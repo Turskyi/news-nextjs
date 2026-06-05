@@ -4,6 +4,18 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { cleanNewsArticle } from '@/services/newsContentCleaner';
 import { NewsArticleDeduplicator } from '@/services/NewsArticleDeduplicator';
 
+interface GNewsArticle {
+  source?: {
+    name?: string;
+  };
+  title?: string;
+  description?: string;
+  url: string;
+  image?: string;
+  publishedAt?: string;
+  content?: string;
+}
+
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -65,7 +77,9 @@ export default async function handler(
       const newsResponse: NewsResponse = await result.json();
       articles = (
         Array.isArray(newsResponse.articles) ? newsResponse.articles : []
-      ).map(cleanNewsArticle);
+      )
+        .map(cleanNewsArticle)
+        .filter((article) => article.content !== null);
     }
 
     const uniqueArticles: NewsArticle[] =
@@ -113,7 +127,7 @@ export default async function handler(
       const gNewsArticles = Array.isArray(data.articles) ? data.articles : [];
 
       return gNewsArticles
-        .map((article: any) => ({
+        .map((article: GNewsArticle) => ({
           author: article.source?.name ?? null,
           title: article.title ?? null,
           description: article.description ?? null,
@@ -122,7 +136,8 @@ export default async function handler(
           publishedAt: article.publishedAt ?? null,
           content: article.content ?? null,
         }))
-        .map(cleanNewsArticle);
+        .map(cleanNewsArticle)
+        .filter((article: NewsArticle) => article.content !== null);
     }
 
     function isRateLimitError(errorData: unknown, status: number): boolean {
