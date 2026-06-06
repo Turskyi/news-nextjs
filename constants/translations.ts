@@ -56,6 +56,29 @@ export interface Translations {
     telegramSupport: string;
     joinChannel: string;
   };
+  privacy: {
+    title: string;
+    header: string;
+    tableOfContents: string;
+    introduction: string;
+    introductionText: string;
+    lastRevised: string;
+    informationWeCollect: string;
+    informationWeCollectText: string;
+    dataRetention: string;
+    dataRetentionText: string;
+    thirdPartyServices: string;
+    thirdPartyServicesText: string;
+    analyticsTracking: string;
+    analyticsTrackingText: string;
+    userRights: string;
+    userRightsText: string;
+    userRightsNote: string;
+    updatesToThisPolicy: string;
+    updatesToThisPolicyText: string;
+    contactUs: string;
+    contactUsText: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -138,6 +161,38 @@ export const translations: Record<Language, Translations> = {
       telegramSupport: 'Telegram Support',
       joinChannel: 'Join our support channel',
     },
+    privacy: {
+      title: 'Privacy Policy - News Glance',
+      header: 'Privacy Policy',
+      tableOfContents: 'Table of Contents',
+      introduction: 'Introduction',
+      introductionText:
+        'At News Glance, we are committed to protecting your personal information and your right to privacy. This Privacy Policy applies to all information collected through our app and website, including mobile, web, and desktop platforms.',
+      lastRevised: 'Last Revised: April 22, 2025',
+      informationWeCollect: 'Information We Collect',
+      informationWeCollectText:
+        'We do not collect any personal information from users of our app or website. News Glance does not require you to sign up, log in, or provide any personal data to access its core features.',
+      dataRetention: 'Data Retention',
+      dataRetentionText:
+        'Since we do not collect any personal information, we do not retain any user data. No personal data is stored or processed on our servers.',
+      thirdPartyServices: 'Third-Party Services',
+      thirdPartyServicesText:
+        'News Glance does not collect or share any personal information. However, we utilize third-party AI providers including Groq, Mistral, and Google (Gemini) as data processors to generate news conclusions. These providers process news article content to provide summaries and insights. Additionally, third-party platforms such as the Apple App Store, embedded web views, and other third-party services may collect data in accordance with their own privacy policies. This may include tracking information, cookies, or location data. We encourage users to review the privacy practices of these third-party services.',
+      analyticsTracking: 'Analytics and Tracking',
+      analyticsTrackingText:
+        'News Glance does not collect personal information, but we may use third-party analytics services, such as Google Analytics or Firebase, to track app performance and usage data. These services collect anonymous usage data, which helps us improve the app experience. The data collected by these services is subject to their respective privacy policies.',
+      userRights: 'User Rights',
+      userRightsText:
+        'Since News Glance does not collect or process personal information, we do not store any user data. However, depending on your location, including under the General Data Protection Regulation (GDPR) or the California Consumer Privacy Act (CCPA), you may have certain rights regarding your personal data, which would apply to third-party services that collect data (such as the Apple App Store or external web views).',
+      userRightsNote:
+        'Please note that if you navigate to external sites via the WebView, any data collection or actions on those websites are outside of our control and responsibility.',
+      updatesToThisPolicy: 'Updates to this Policy',
+      updatesToThisPolicyText:
+        'We may update this privacy policy from time to time. The updated version will be indicated by an updated "Revised" date and the updated version will be effective as soon as it is accessible.',
+      contactUs: 'Contact Us',
+      contactUsText:
+        'If you have questions or comments about this policy, you may email us at',
+    },
   },
   uk: {
     title: 'Огляд Новин',
@@ -218,6 +273,38 @@ export const translations: Record<Language, Translations> = {
       email: 'Електронна пошта',
       telegramSupport: 'Підтримка в Telegram',
       joinChannel: 'Приєднайтеся до нашого каналу підтримки',
+    },
+    privacy: {
+      title: 'Політика конфіденційності - Огляд Новин',
+      header: 'Політика конфіденційності',
+      tableOfContents: 'Зміст',
+      introduction: 'Вступ',
+      introductionText:
+        "У Огляді Новин ми прив'язані до захисту ваших персональних даних та вашого права на конфіденційність. Ця Політика конфіденційності застосовується до всієї інформації, зібраної через наш додаток та веб-сайт, включаючи мобільні, веб- та настільні платформи.",
+      lastRevised: 'Останнє оновлення: 22 квітня 2025 р.',
+      informationWeCollect: 'Інформація, яку ми збираємо',
+      informationWeCollectText:
+        'Ми не збираємо будь-яку персональну інформацію від користувачів нашого додатка або веб-сайту. Огляд Новин не вимагає від вас реєстрацію, вхід або надання будь-яких персональних даних для доступу до його основних функцій.',
+      dataRetention: 'Зберігання даних',
+      dataRetentionText:
+        'Оскільки ми не збираємо персональну інформацію, ми не зберігаємо дані користувачів. Жодні персональні дані не зберігаються та не обробляються на наших серверах.',
+      thirdPartyServices: 'Послуги третіх сторін',
+      thirdPartyServicesText:
+        'Огляд Новин не збирає та не ділиться персональною інформацією. Однак ми використовуємо постачальників ШІ третіх сторін, включаючи Groq, Mistral та Google (Gemini), як обробників даних для створення висновків новин. Ці постачальники обробляють вміст новинних статей для надання резюме та аналітики. Крім того, платформи третіх сторін, такі як Apple App Store, вбудовані веб-представлення та інші послуги третіх сторін можуть збирати дані відповідно до своїх політик конфіденційності. Це може включати інформацію про відстеження, файли cookie або дані про місцезнаходження. Ми рекомендуємо користувачам ознайомитися з практикою конфіденційності цих послуг третіх сторін.',
+      analyticsTracking: 'Аналітика та відстеження',
+      analyticsTrackingText:
+        'Огляд Новин не збирає персональну інформацію, але ми можемо використовувати послуги аналітики третіх сторін, такі як Google Analytics або Firebase, для відстеження продуктивності додатка та даних про використання. Ці послуги збирають анонімні дані про використання, які допомагають нам поліпшити взаємодію з додатком. Дані, зібрані цими послугами, підпадають під їхні відповідні політики конфіденційності.',
+      userRights: 'Права користувачів',
+      userRightsText:
+        'Оскільки Огляд Новин не збирає та не обробляє персональну інформацію, ми не зберігаємо дані користувачів. Однак залежно від вашого місцезнаходження, включаючи Загальне положення про захист даних (GDPR) або Закон про захист конфіденційності споживачів Каліфорнії (CCPA), у вас можуть бути певні права щодо ваших персональних даних, які застосовуватимуться до послуг третіх сторін, які збирають дані (наприклад, Apple App Store або зовнішні веб-представлення).',
+      userRightsNote:
+        'Зауважте, що якщо ви переходите на зовнішні сайти через WebView, будь-яка збірка даних або дії на цих веб-сайтах знаходяться поза нашою контролем та відповідальністю.',
+      updatesToThisPolicy: 'Оновлення цієї Політики',
+      updatesToThisPolicyText:
+        'Ми можемо оновлювати цю політику конфіденційності час від часу. Оновлена версія буде позначена оновленою датою "Переглянуто" і оновлена версія набирає чинності, як тільки вона стає доступною.',
+      contactUs: "Зв'яжіться з нами",
+      contactUsText:
+        'Якщо у вас є питання або коментарі щодо цієї політики, ви можете написати нам на',
     },
   },
 };
