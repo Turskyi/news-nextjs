@@ -1,25 +1,28 @@
 import Head from 'next/head';
+import { Language, translations } from '@/constants/translations';
+import { useRouter } from 'next/router';
 
 const ContactPage = () => {
+  const router = useRouter();
+  const lang = (router.query.lang as Language) || 'en';
+  const t = translations[lang].contact;
+
   return (
     <>
       <Head>
-        <title key="title">Contact us</title>
+        <title key="title">{t.title}</title>
       </Head>
       <main>
-        <h1>Contact us</h1>
-        <p className="mb-6">
-          If you have any issues, questions, or feedback about News Glance, feel
-          free to reach out through any of the channels below.
-        </p>
+        <h1>{t.header}</h1>
+        <p className="mb-6">{t.description}</p>
         {/* Create a div element for the contact information */}
         <div className="mx-auto max-w-lg">
           {/* Create a p element for the phone number */}
           <p className="mb-4">
-            <span className="font-bold">Phone:</span> +1 (437) 985-2581
+            <span className="font-bold">{t.phone}:</span> +1 (437) 985-2581
           </p>
           <div className="mb-4">
-            <p className="text-lg font-bold mb-1">Address:</p>
+            <p className="text-lg font-bold mb-1">{t.address}:</p>
             <address className="not-italic leading-relaxed">
               Harmony Village, <br />
               3035 Finch West Avenue, <br />
@@ -30,25 +33,25 @@ const ContactPage = () => {
 
           {/* Create a p element for the website */}
           <p className="mb-4">
-            <span className="font-bold">Support Form:</span>{' '}
+            <span className="font-bold">{t.supportForm}:</span>{' '}
             <a href="https://turskyi.com/#/support" className="text-blue-500">
               turskyi.com/support
             </a>
           </p>
           {/* Create a p element for the email */}
           <p className="mb-4">
-            <span className="font-bold">Email:</span>{' '}
+            <span className="font-bold">{t.email}:</span>{' '}
             <a href="mailto:dmytro@turskyi.com" className="text-blue-500">
               dmytro@turskyi.com
             </a>
           </p>
           <p className="mb-4">
-            <span className="font-bold">Telegram Support:</span>{' '}
+            <span className="font-bold">{t.telegramSupport}:</span>{' '}
             <a
               href="https://t.me/+HrCX6YD2-X82MzIy"
               className="text-blue-500 underline"
             >
-              Join our support channel
+              {t.joinChannel}
             </a>
           </p>
         </div>

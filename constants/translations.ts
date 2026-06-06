@@ -45,13 +45,26 @@ export interface Translations {
     supportPage: string;
     telegramChannel: string;
   };
+  contact: {
+    title: string;
+    header: string;
+    description: string;
+    phone: string;
+    address: string;
+    supportForm: string;
+    email: string;
+    telegramSupport: string;
+    joinChannel: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
   en: {
     title: 'News Glance',
-    description: 'A website that displays top news articles and uses modern AI to generate a conclusion.',
-    aiSubtitle: 'AI-powered actionable insights from today\'s comprehensive news analysis',
+    description:
+      'A website that displays top news articles and uses modern AI to generate a conclusion.',
+    aiSubtitle:
+      "AI-powered actionable insights from today's comprehensive news analysis",
     loadingInsight: 'Analyzing news for insights...',
     readMore: 'Read more',
     actionableInsight: 'Actionable Insight',
@@ -88,7 +101,8 @@ export const translations: Record<Language, Translations> = {
     about: {
       title: 'About',
       header: 'About News Glance',
-      description: 'News Glance is a minimalist, modern AI-powered news app that gives you the one thing you need every day: a smart, simple conclusion. At the top of the app, you\'ll find a single-sentence summary of today’s most important news — helping you understand the world at a glance.',
+      description:
+        "News Glance is a minimalist, modern AI-powered news app that gives you the one thing you need every day: a smart, simple conclusion. At the top of the app, you'll find a single-sentence summary of today’s most important news — helping you understand the world at a glance.",
       keyFeatures: 'Key Features',
       features: [
         '🧠 Modern AI-generated daily conclusion, based on top global news',
@@ -97,8 +111,9 @@ export const translations: Record<Language, Translations> = {
         '📲 Home screen widget to keep the conclusion always visible',
         '⚡️ Clean, fast, and distraction-free design',
       ],
-      whoItsFor: 'Who It\'s For',
-      whoItsForDescription: 'News Glance is for anyone who wants to stay informed — without the overwhelm. If you\'re busy, distracted, or just tired of endless headlines, this app gives you clarity in seconds.',
+      whoItsFor: "Who It's For",
+      whoItsForDescription:
+        "News Glance is for anyone who wants to stay informed — without the overwhelm. If you're busy, distracted, or just tired of endless headlines, this app gives you clarity in seconds.",
       screenshotsExplained: 'Screenshots Explained',
       screenshots: [
         '🟩 Conclusion summary: instantly see the top takeaway of the day',
@@ -111,11 +126,25 @@ export const translations: Record<Language, Translations> = {
       supportPage: 'support page',
       telegramChannel: 'Telegram support channel',
     },
+    contact: {
+      title: 'Contact us',
+      header: 'Contact us',
+      description:
+        'If you have any issues, questions, or feedback about News Glance, feel free to reach out through any of the channels below.',
+      phone: 'Phone',
+      address: 'Address',
+      supportForm: 'Support Form',
+      email: 'Email',
+      telegramSupport: 'Telegram Support',
+      joinChannel: 'Join our support channel',
+    },
   },
   uk: {
     title: 'Огляд Новин',
-    description: 'Веб-сайт, який відображає головні новини та використовує сучасний ШІ для створення висновків.',
-    aiSubtitle: 'Аналітичні висновки на основі ШІ з сьогоднішнього огляду новин',
+    description:
+      'Веб-сайт, який відображає головні новини та використовує сучасний ШІ для створення висновків.',
+    aiSubtitle:
+      'Аналітичні висновки на основі ШІ з сьогоднішнього огляду новин',
     loadingInsight: 'Аналіз новин для отримання висновків...',
     readMore: 'Читати далі',
     actionableInsight: 'Практичні висновки',
@@ -129,7 +158,7 @@ export const translations: Record<Language, Translations> = {
     categories: {
       SAFETY: 'Безпека',
       FINANCE: 'Фінанси',
-      HEALTH: 'Здоров\'я',
+      HEALTH: "Здоров'я",
       TRAVEL: 'Подорожі',
       LIFESTYLE: 'Стиль життя',
       GENERAL: 'Загальне',
@@ -137,7 +166,7 @@ export const translations: Record<Language, Translations> = {
     nav: {
       news: 'Новини',
       search: 'Пошук',
-      contact: 'Зворотній зв\'язок',
+      contact: "Зворотній зв'язок",
       privacy: 'Конфіденційність',
       about: 'Про нас',
     },
@@ -152,7 +181,8 @@ export const translations: Record<Language, Translations> = {
     about: {
       title: 'Про нас',
       header: 'Про Огляд Новин',
-      description: 'Огляд Новин — це мінімалістичний, сучасний додаток для новин на базі ШІ, який дає вам одну річ, яка вам потрібна щодня: розумний, простий висновок. У верхній частині додатка ви знайдете резюме найважливіших новин дня одним реченням, що допоможе вам зрозуміти світ з першого погляду.',
+      description:
+        'Огляд Новин — це мінімалістичний, сучасний додаток для новин на базі ШІ, який дає вам одну річ, яка вам потрібна щодня: розумний, простий висновок. У верхній частині додатка ви знайдете резюме найважливіших новин дня одним реченням, що допоможе вам зрозуміти світ з першого погляду.',
       keyFeatures: 'Ключові особливості',
       features: [
         '🧠 Сучасний щоденний висновок, згенерований ШІ на основі головних світових новин',
@@ -162,7 +192,8 @@ export const translations: Record<Language, Translations> = {
         '⚡️ Чистий, швидкий дизайн без відволікань',
       ],
       whoItsFor: 'Для кого це',
-      whoItsForDescription: 'Огляд Новин для тих, хто хоче залишатися в курсі подій без перевантаження. Якщо ви зайняті, розсіяні або просто втомилися від нескінченних заголовків, цей додаток дасть вам ясність за лічені секунди.',
+      whoItsForDescription:
+        'Огляд Новин для тих, хто хоче залишатися в курсі подій без перевантаження. Якщо ви зайняті, розсіяні або просто втомилися від нескінченних заголовків, цей додаток дасть вам ясність за лічені секунди.',
       screenshotsExplained: 'Пояснення скріншотів',
       screenshots: [
         '🟩 Резюме висновку: миттєво дізнайтеся головний підсумок дня',
@@ -171,9 +202,22 @@ export const translations: Record<Language, Translations> = {
         '🏠 Віджет: переглядайте щоденний висновок безпосередньо з головного екрана',
       ],
       support: 'Підтримка',
-      supportText: 'З будь-яких питань або для зворотного зв’язку, будь ласка, відвідайте нашу ',
+      supportText:
+        'З будь-яких питань або для зворотного зв’язку, будь ласка, відвідайте нашу ',
       supportPage: 'сторінку підтримки',
       telegramChannel: 'канал підтримки в Telegram',
+    },
+    contact: {
+      title: "Зворотній зв'язок",
+      header: "Зворотній зв'язок",
+      description:
+        "Якщо у вас є будь-які питання, проблеми або відгуки про Огляд Новин, зв'яжіться з нами через будь-який з наступних каналів.",
+      phone: 'Телефон',
+      address: 'Адреса',
+      supportForm: 'Форма підтримки',
+      email: 'Електронна пошта',
+      telegramSupport: 'Підтримка в Telegram',
+      joinChannel: 'Приєднайтеся до нашого каналу підтримки',
     },
   },
 };
