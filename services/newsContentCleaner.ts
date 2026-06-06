@@ -20,55 +20,104 @@ export function cleanNewsApiContent(
     return null;
   }
 
-  return isLikelyUnreadableContent(cleanedContent) ? null : cleanedContent;
+  return isLikelyUnreadableContent(cleanedContent) ? '' : cleanedContent;
 }
 
 function isLikelyUnreadableContent(content: string): boolean {
-  const letters = content.match(/\p{L}/gu)?.length ?? 0;
-  const words = content.match(/\p{L}+/gu)?.length ?? 0;
+  const normalizedContent = content.replace(/[\r\n]+/g, ' ').trim();
+  const letters = normalizedContent.match(/\p{L}/gu)?.length ?? 0;
+  const words = normalizedContent.match(/\p{L}+/gu)?.length ?? 0;
+  const tokens = normalizedContent
+    .split(/\s+/)
+    .filter((token) => token.length > 0);
 
-  if (letters === 0) {
+  if (letters === 0 || words < MINIMUM_READABLE_WORD_COUNT) {
     return true;
   }
 
-  // Check for garbage text patterns
-  if (isGarbageText(content)) {
+  if (letters < MINIMUM_READABLE_LETTER_COUNT) {
     return true;
   }
 
-  return (
-    content.length >= MINIMUM_READABLE_LENGTH &&
-    (words < MINIMUM_READABLE_WORD_COUNT ||
-      letters < MINIMUM_READABLE_LETTER_COUNT)
-  );
+  if (containsContentMarkers(normalizedContent)) {
+    return true;
+  }
+
+  if (hasLowLetterDensity(normalizedContent, letters)) {
+    return true;
+  }
+
+  if (hasTooManyShortTokens(tokens)) {
+    return true;
+  }
+
+  if (isGarbageText(normalizedContent)) {
+    return true;
+  }
+
+  return false;
+}
+
+function containsContentMarkers(content: string): boolean {
+  const patterns = [
+    /https?:\/\//i,
+    /\bt\.me\b/i,
+    /\btelegram\b/i,
+    /\bwhatsapp\b/i,
+    /\bclick here\b/i,
+    /\bsubscribe\b/i,
+    /\bjoin us\b/i,
+  ];
+
+  return patterns.some((pattern) => pattern.test(content));
+}
+
+function hasLowLetterDensity(content: string, letterCount: number): boolean {
+  const length = content.length;
+  if (length === 0) {
+    return true;
+  }
+
+  const letterDensity = letterCount / length;
+  return letterDensity < 0.4;
+}
+
+function hasTooManyShortTokens(tokens: string[]): boolean {
+  if (tokens.length < 8) {
+    return false;
+  }
+
+  const shortTokenCount = tokens.filter((token) => token.length <= 2).length;
+  const symbolOnlyTokenCount = tokens.filter(
+    (token) => !/\p{L}/u.test(token),
+  ).length;
+  const shortTokenRatio = shortTokenCount / tokens.length;
+  const symbolOnlyTokenRatio = symbolOnlyTokenCount / tokens.length;
+
+  return shortTokenRatio > 0.35 || symbolOnlyTokenRatio > 0.25;
 }
 
 function isGarbageText(content: string): boolean {
-  // Check for excessive special characters and punctuation
   const specialCharCount = (content.match(/[^\p{L}\p{N}\s]/gu) || []).length;
   const letters = content.match(/\p{L}/gu)?.length ?? 0;
   const specialCharRatio = letters > 0 ? specialCharCount / letters : 0;
 
-  // If special characters are more than 50% of letters, likely garbage
   if (specialCharRatio > 0.5) {
     return true;
   }
 
-  // Check for repeated patterns like "( - - )" or "- , , ,"
   const repeatedPatterns =
     /(\(\s*-\s*-\s*\)|(-\s*,\s*,)|(:\s*,\s*:)|(\.\s*\.\s*\.))+/g;
-  const patternMatches = content.match(repeatedPatterns) || [];
+  const patternMatches: string[] = content.match(repeatedPatterns) || [];
   const totalPatternLength = patternMatches.reduce(
     (sum, m) => sum + m.length,
     0,
   );
 
-  // If repeated garbage patterns make up more than 20% of content, filter it
   if (content.length > 0 && totalPatternLength / content.length > 0.2) {
     return true;
   }
 
-  // Check for excessive non-ASCII or control characters
   const nonPrintableCount = (
     content.match(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g) || []
   ).length;
