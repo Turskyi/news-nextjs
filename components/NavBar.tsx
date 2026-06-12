@@ -40,10 +40,16 @@ const NavBar = () => {
             <Nav.Link as={Link} href={lang === 'en' ? '/' : `/?lang=${lang}`}>
               {t.nav.news}
             </Nav.Link>
-            <Nav.Link as={Link} href={lang === 'en' ? '/search' : `/search?lang=${lang}`}>
+            <Nav.Link
+              as={Link}
+              href={lang === 'en' ? '/search' : `/search?lang=${lang}`}
+            >
               {t.nav.search}
             </Nav.Link>
-            <Nav.Link as={Link} href={lang === 'en' ? '/contact' : `/contact?lang=${lang}`}>
+            <Nav.Link
+              as={Link}
+              href={lang === 'en' ? '/contact' : `/contact?lang=${lang}`}
+            >
               {t.nav.contact}
             </Nav.Link>
           </Nav>
@@ -65,6 +71,18 @@ const NavBar = () => {
                 alt="Get it on Google Play"
                 width={124}
                 height={48}
+              />
+            </a>
+            <a
+              href="https://apps.apple.com/ca/app/news-glance/id6743685132"
+              target="_blank"
+              className="ms-2"
+            >
+              <Image
+                src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                alt="Download on the App Store"
+                width={135}
+                height={40}
               />
             </a>
           </Nav>
