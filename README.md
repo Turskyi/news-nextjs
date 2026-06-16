@@ -6,7 +6,8 @@
 # News Glance
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped
-with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+with [
+`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 **News Glance** is a website that displays top ten news articles and uses AI to
 generate a conclusion based on the first five titles. It also allows users to
@@ -39,9 +40,9 @@ This project uses
 [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
 automatically optimize and load Inter, a custom Google Font.
 
-## Demo and screenshots
+## Web and screenshots
 
-You can view a live demo of the project [here](https://news.turskyi.com).
+You can view a web version of the project [here](https://newsglanceai.com).
 
 Here is a screenshot of the project:
 
@@ -73,7 +74,8 @@ This project was built using the following technologies and tools:
 - [News API](https://newsapi.org): A simple and easy-to-use API that returns
   JSON metadata for headlines and articles live all over the web.
 
-- **Ai Api** : [Groq](https://groq.com), [Mistral](https://mistral.ai), [Gemini](https://ai.google.dev);
+- **Ai Api
+  ** : [Groq](https://groq.com), [Mistral](https://mistral.ai), [Gemini](https://ai.google.dev);
 
 - Architectural pattern:
   [Monolith](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#all-in-one-applications);
