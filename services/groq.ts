@@ -16,7 +16,7 @@ export const getGroqConclusion = async (systemPrompt: string, userPrompt: string
         content: userPrompt,
       },
     ],
-    model: 'llama-3.3-70b-versatile',
+    model: 'qwen/qwen3.6-27b',
   });
 
   return chatCompletion.choices[0]?.message?.content?.trim() || '';
