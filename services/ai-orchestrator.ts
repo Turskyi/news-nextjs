@@ -7,8 +7,10 @@ export const getConclusionWithFallback = async (
   userPrompt: string,
 ): Promise<{ content: string; model: string }> => {
   const cleanContent = (content: string) => {
-    // Strip <think>...</think> tags if present
-    return content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+    // Strip <think> or <thought> tags, even if they aren't closed (handles truncation)
+    return content
+      .replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, '')
+      .trim();
   };
 
   try {

@@ -76,7 +76,15 @@ export default async function handler(
   );
 
   try {
-    const jsonString = rawResponse.replace(/```json\n?|\n?```/g, '').trim();
+    // Extract JSON block even if there's surrounding text or unclosed tags
+    const startIndex = rawResponse.indexOf('{');
+    const endIndex = rawResponse.lastIndexOf('}');
+
+    if (startIndex === -1 || endIndex === -1) {
+      throw new Error('No JSON object found in response');
+    }
+
+    const jsonString = rawResponse.substring(startIndex, endIndex + 1);
     const insight: ActionableInsight = JSON.parse(jsonString);
     insight.model = model;
 
