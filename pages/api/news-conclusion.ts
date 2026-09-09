@@ -76,7 +76,7 @@ export default async function handler(
     ? 'IMPORTANT: The response MUST be in Ukrainian.'
     : 'IMPORTANT: The response MUST be in English.';
 
-  const conclusion = await getConclusionWithFallback(
+  const { content: conclusion, model } = await getConclusionWithFallback(
     NEWS_CONCLUSION_SYSTEM_PROMPT + '\n' + langInstruction,
     NEWS_CONCLUSION_USER_PROMPT(newsString),
   );
@@ -89,5 +89,5 @@ export default async function handler(
   return response
     .setHeader('Content-Type', 'application/json')
     .status(200)
-    .json({ conclusion });
+    .json({ conclusion, model });
 }

@@ -70,7 +70,7 @@ export default async function handler(
     ? 'IMPORTANT: The "conclusion" field MUST be in Ukrainian. The "level" and "category" fields MUST remain in English as defined in the rules.'
     : 'IMPORTANT: The "conclusion" field MUST be in English.';
 
-  const rawResponse = await getConclusionWithFallback(
+  const { content: rawResponse, model } = await getConclusionWithFallback(
     ACTIONABLE_INSIGHT_SYSTEM_PROMPT + '\n' + langInstruction,
     ACTIONABLE_INSIGHT_USER_PROMPT(newsString),
   );
@@ -78,6 +78,7 @@ export default async function handler(
   try {
     const jsonString = rawResponse.replace(/```json\n?|\n?```/g, '').trim();
     const insight: ActionableInsight = JSON.parse(jsonString);
+    insight.model = model;
 
     cache[cacheKey] = {
       insight,
@@ -92,6 +93,7 @@ export default async function handler(
       level: SignalLevel.NEUTRAL,
       probability: 0,
       category: InsightCategory.GENERAL,
+      model: model,
     };
     return response.status(200).json(fallback);
   }

@@ -193,6 +193,23 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
           {insight.conclusion}
         </ReactMarkdown>
       </div>
+
+      {insight.model && (
+        <div
+          style={{
+            marginTop: '1.5rem',
+            fontSize: '0.7rem',
+            color: styles.text,
+            opacity: 0.4,
+            textAlign: 'right',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          Analyzed by {insight.model}
+        </div>
+      )}
     </div>
   );
 };

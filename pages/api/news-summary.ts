@@ -90,7 +90,10 @@ export default async function handler(
       ? NEWS_SUMMARY_USER_PROMPT_UK(newsString)
       : NEWS_SUMMARY_USER_PROMPT(newsString);
 
-  let summary = await getConclusionWithFallback(systemPrompt, userPrompt);
+  const { content: summary, model } = await getConclusionWithFallback(
+    systemPrompt,
+    userPrompt,
+  );
 
   cache[cacheKey] = {
     summary,
@@ -100,5 +103,5 @@ export default async function handler(
   return response
     .setHeader('Content-Type', 'application/json')
     .status(200)
-    .json({ summary });
+    .json({ summary, model });
 }

@@ -19,4 +19,5 @@ export interface ActionableInsight {
   level: SignalLevel;
   probability: number; // 0 to 1
   category: InsightCategory;
+  model?: string;
 }

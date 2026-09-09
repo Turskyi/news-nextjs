@@ -5,11 +5,19 @@ import { getGeminiConclusion } from './gemini';
 export const getConclusionWithFallback = async (
   systemPrompt: string,
   userPrompt: string,
-): Promise<string> => {
+): Promise<{ content: string; model: string }> => {
+  const cleanContent = (content: string) => {
+    // Strip <think>...</think> tags if present
+    return content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+  };
+
   try {
     const groqResponse = await getGroqConclusion(systemPrompt, userPrompt);
-    if (groqResponse) {
-      return groqResponse;
+    if (groqResponse.content) {
+      return {
+        content: cleanContent(groqResponse.content),
+        model: groqResponse.model,
+      };
     }
     throw new Error('Groq returned empty response');
   } catch (groqError) {
@@ -19,8 +27,11 @@ export const getConclusionWithFallback = async (
         systemPrompt,
         userPrompt,
       );
-      if (mistralResponse) {
-        return mistralResponse;
+      if (mistralResponse.content) {
+        return {
+          content: cleanContent(mistralResponse.content),
+          model: mistralResponse.model,
+        };
       }
       throw new Error('Mistral returned empty response');
     } catch (mistralError) {
@@ -30,13 +41,19 @@ export const getConclusionWithFallback = async (
           systemPrompt,
           userPrompt,
         );
-        if (geminiResponse) {
-          return geminiResponse;
+        if (geminiResponse.content) {
+          return {
+            content: cleanContent(geminiResponse.content),
+            model: geminiResponse.model,
+          };
         }
         throw new Error('Gemini returned empty response');
       } catch (geminiError) {
         console.error('All AI providers failed:', geminiError);
-        return 'No conclusion available at the moment. Please try again later.';
+        return {
+          content: 'No conclusion available at the moment. Please try again later.',
+          model: 'none',
+        };
       }
     }
   }
