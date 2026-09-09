@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createHash } from 'crypto';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
 import { NEWS_CONCLUSION_SYSTEM_PROMPT, NEWS_CONCLUSION_USER_PROMPT } from '../../constants/prompts';
-import { getConclusionWithFallback } from '../../services/ai-orchestrator';
+import { getConclusionWithFallback, cleanAIText } from '../../services/ai-orchestrator';
 import { ActionableInsight, SignalLevel, InsightCategory } from '../../models/ActionableInsight';
 
 interface Input {
@@ -76,10 +76,12 @@ export default async function handler(
     ? 'IMPORTANT: The response MUST be in Ukrainian.'
     : 'IMPORTANT: The response MUST be in English.';
 
-  const { content: conclusion, model } = await getConclusionWithFallback(
+  const { content: rawConclusion, model } = await getConclusionWithFallback(
     NEWS_CONCLUSION_SYSTEM_PROMPT + '\n' + langInstruction,
     NEWS_CONCLUSION_USER_PROMPT(newsString),
   );
+
+  const conclusion = cleanAIText(rawConclusion);
 
   cache[cacheKey] = {
     conclusion,

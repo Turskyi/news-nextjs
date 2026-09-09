@@ -2,24 +2,21 @@ import { getGroqConclusion } from './groq';
 import { getMistralConclusion } from './mistral';
 import { getGeminiConclusion } from './gemini';
 
+export const cleanAIText = (content: string) => {
+  // Strip <think> or <thought> tags, even if they aren't closed (handles truncation)
+  return content
+    .replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, '')
+    .trim();
+};
+
 export const getConclusionWithFallback = async (
   systemPrompt: string,
   userPrompt: string,
 ): Promise<{ content: string; model: string }> => {
-  const cleanContent = (content: string) => {
-    // Strip <think> or <thought> tags, even if they aren't closed (handles truncation)
-    return content
-      .replace(/<(?:think|thought)>[\s\S]*?(?:<\/(?:think|thought)>|$)/gi, '')
-      .trim();
-  };
-
   try {
     const groqResponse = await getGroqConclusion(systemPrompt, userPrompt);
     if (groqResponse.content) {
-      return {
-        content: cleanContent(groqResponse.content),
-        model: groqResponse.model,
-      };
+      return groqResponse;
     }
     throw new Error('Groq returned empty response');
   } catch (groqError) {
@@ -30,10 +27,7 @@ export const getConclusionWithFallback = async (
         userPrompt,
       );
       if (mistralResponse.content) {
-        return {
-          content: cleanContent(mistralResponse.content),
-          model: mistralResponse.model,
-        };
+        return mistralResponse;
       }
       throw new Error('Mistral returned empty response');
     } catch (mistralError) {
@@ -44,10 +38,7 @@ export const getConclusionWithFallback = async (
           userPrompt,
         );
         if (geminiResponse.content) {
-          return {
-            content: cleanContent(geminiResponse.content),
-            model: geminiResponse.model,
-          };
+          return geminiResponse;
         }
         throw new Error('Gemini returned empty response');
       } catch (geminiError) {

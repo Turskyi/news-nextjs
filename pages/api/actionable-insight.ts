@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createHash } from 'crypto';
 import { ConclusionArticle } from '../../models/ConclusionArticle';
 import { ACTIONABLE_INSIGHT_SYSTEM_PROMPT, ACTIONABLE_INSIGHT_USER_PROMPT } from '../../constants/prompts';
-import { getConclusionWithFallback } from '../../services/ai-orchestrator';
+import { getConclusionWithFallback, cleanAIText } from '../../services/ai-orchestrator';
 import { ActionableInsight, SignalLevel, InsightCategory } from '../../models/ActionableInsight';
 
 interface Input {
@@ -76,16 +76,31 @@ export default async function handler(
   );
 
   try {
-    // Extract JSON block even if there's surrounding text or unclosed tags
-    const startIndex = rawResponse.indexOf('{');
-    const endIndex = rawResponse.lastIndexOf('}');
+    // Robustly extract the LAST balanced JSON object from the response
+    // This ignores thoughts or conversational text before or after the JSON
+    const extractJson = (text: string): string | null => {
+      let stack = 0;
+      let lastEnd = text.lastIndexOf('}');
+      if (lastEnd === -1) return null;
 
-    if (startIndex === -1 || endIndex === -1) {
-      throw new Error('No JSON object found in response');
+      for (let i = lastEnd; i >= 0; i--) {
+        if (text[i] === '}') stack++;
+        else if (text[i] === '{') stack--;
+
+        if (stack === 0 && text[i] === '{') {
+          return text.substring(i, lastEnd + 1);
+        }
+      }
+      return null;
+    };
+
+    const jsonString = extractJson(rawResponse);
+    if (!jsonString) {
+      throw new Error('No valid JSON object found in response');
     }
 
-    const jsonString = rawResponse.substring(startIndex, endIndex + 1);
     const insight: ActionableInsight = JSON.parse(jsonString);
+    insight.conclusion = cleanAIText(insight.conclusion);
     insight.model = model;
 
     cache[cacheKey] = {
@@ -97,7 +112,7 @@ export default async function handler(
   } catch (error) {
     console.error('Failed to parse AI response:', rawResponse);
     const fallback: ActionableInsight = {
-      conclusion: rawResponse,
+      conclusion: cleanAIText(rawResponse),
       level: SignalLevel.NEUTRAL,
       probability: 0,
       category: InsightCategory.GENERAL,

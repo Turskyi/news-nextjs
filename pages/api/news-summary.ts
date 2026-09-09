@@ -7,7 +7,7 @@ import {
   NEWS_SUMMARY_USER_PROMPT,
   NEWS_SUMMARY_USER_PROMPT_UK,
 } from '../../constants/prompts';
-import { getConclusionWithFallback } from '../../services/ai-orchestrator';
+import { getConclusionWithFallback, cleanAIText } from '../../services/ai-orchestrator';
 
 interface Input {
   articles: ConclusionArticle[];
@@ -90,10 +90,12 @@ export default async function handler(
       ? NEWS_SUMMARY_USER_PROMPT_UK(newsString)
       : NEWS_SUMMARY_USER_PROMPT(newsString);
 
-  const { content: summary, model } = await getConclusionWithFallback(
+  const { content: rawSummary, model } = await getConclusionWithFallback(
     systemPrompt,
     userPrompt,
   );
+
+  const summary = cleanAIText(rawSummary);
 
   cache[cacheKey] = {
     summary,
