@@ -111,8 +111,13 @@ export default async function handler(
     return response.status(200).json(insight);
   } catch (error) {
     console.error('Failed to parse AI response:', rawResponse);
+    const fallbackText = cleanAIText(rawResponse);
+    const defaultConclusion = lang === 'uk'
+      ? 'Перегляньте останні оновлення, щоб залишатися в курсі подій.'
+      : 'Review the latest updates to stay informed on current events.';
+
     const fallback: ActionableInsight = {
-      conclusion: cleanAIText(rawResponse),
+      conclusion: fallbackText || defaultConclusion,
       level: SignalLevel.NEUTRAL,
       probability: 0,
       category: InsightCategory.GENERAL,

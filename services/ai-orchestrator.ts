@@ -15,10 +15,11 @@ export const getConclusionWithFallback = async (
 ): Promise<{ content: string; model: string }> => {
   try {
     const groqResponse = await getGroqConclusion(systemPrompt, userPrompt);
-    if (groqResponse.content) {
+    // Ensure there is actual content left after cleaning the AI tags
+    if (groqResponse.content && cleanAIText(groqResponse.content).length > 0) {
       return groqResponse;
     }
-    throw new Error('Groq returned empty response');
+    throw new Error('Groq returned empty or unusable thinking-only response');
   } catch (groqError) {
     console.error('Groq failed, trying Mistral:', groqError);
     try {
@@ -26,10 +27,10 @@ export const getConclusionWithFallback = async (
         systemPrompt,
         userPrompt,
       );
-      if (mistralResponse.content) {
+      if (mistralResponse.content && cleanAIText(mistralResponse.content).length > 0) {
         return mistralResponse;
       }
-      throw new Error('Mistral returned empty response');
+      throw new Error('Mistral returned empty or unusable thinking-only response');
     } catch (mistralError) {
       console.error('Mistral failed, trying Gemini:', mistralError);
       try {
@@ -37,10 +38,10 @@ export const getConclusionWithFallback = async (
           systemPrompt,
           userPrompt,
         );
-        if (geminiResponse.content) {
+        if (geminiResponse.content && cleanAIText(geminiResponse.content).length > 0) {
           return geminiResponse;
         }
-        throw new Error('Gemini returned empty response');
+        throw new Error('Gemini returned empty or unusable thinking-only response');
       } catch (geminiError) {
         console.error('All AI providers failed:', geminiError);
         return {
