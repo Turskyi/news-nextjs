@@ -5,7 +5,7 @@ const groq = new Groq({
 });
 
 export const getGroqConclusion = async (systemPrompt: string, userPrompt: string): Promise<{ content: string; model: string }> => {
-  const model = 'qwen/qwen3.6-27b';
+  const model = 'qwen/qwen3.8-27b';
   const chatCompletion = await groq.chat.completions.create({
     messages: [
       {
