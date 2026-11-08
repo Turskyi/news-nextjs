@@ -162,6 +162,7 @@ const ActionableInsightCard: React.FC<ActionableInsightCardProps> = ({
                   style={{
                     color: isHighRisk ? '#e11d48' : 'inherit',
                     fontWeight: isHighRisk ? 700 : 600,
+                    marginRight: '0.5rem',
                   }}
                 >
                   {Math.round(probability * 100)}% {t.probability}
